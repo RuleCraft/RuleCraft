@@ -30,8 +30,8 @@ const PERSONAS = [
 const FAQ = [
   ["What is a Uniswap v4 hook?", "A contract a v4 pool calls at fixed points: when it opens, when liquidity moves, before and after swaps. The hook's address encodes which of 14 callbacks it may run, so its powers are readable from the address alone."],
   ["What does Rule Craft add on top?", "A library of bounded rule modules behind one hook, a composer that shows exactly what a combination does, a registry of blueprints whose authors earn royalties, and a launcher that opens a new token directly into its ruled pool."],
-  ["Is anything live today?", `The composer, the scanner, the live pool index and all docs are live and read ${CHAIN.name} directly. The Rule Craft contracts and the ${BRAND.symbol} token are published at launch; every button that would sign says so.`],
-  ["Who earns what?", `LPs keep the base fee in full. Add-on rules (taxes, streams, pots) pay their own recipients; from that add-on revenue only, a blueprint author may take up to ${FEE_MODEL.royaltyMaxPct}% and the protocol takes ${FEE_MODEL.protocolSharePct}% by design. A pool with no add-ons pays the protocol nothing.`],
+  ["Is anything live today?", `The composer, the scanner, the live pool index and all docs are live and read ${CHAIN.name} directly. The Rule Craft contracts (hook, launcher, blueprint registry) are written and tested but not deployed yet, and they are unaudited; until the owner deploys them, every button that would sign says "Not deployed yet". The ${BRAND.symbol} token address is published at launch.`],
+  ["Who earns what?", `LPs keep the LP fee in full. Burns go to the dead address. From the guard tax and LP stream (add-on revenue) only, a blueprint author takes the royalty they set (up to ${FEE_MODEL.royaltyMaxPct}%) and the protocol takes ${FEE_MODEL.protocolSharePct}% by default, a rate fixed once when the registry is deployed; the rest goes to in-range LPs. A pool with no add-ons pays the protocol nothing.`],
   ["Can rules change after launch?", "No. Module settings, royalty and protocol share are frozen when the pool is created. The hook keeps no switch to turn a rule back on or raise a number."],
   ["Is the risk grade an audit?", "No. It scores permissions and settings: how far the rules can move a trade or an LP from a plain pool. It never inspects code quality. See the methodology page for every factor."],
 ];
@@ -61,7 +61,7 @@ async function LiveCounts() {
 }
 
 export default function Home() {
-  const sample = compose(draftFromBlueprint("bell-ringer")!);
+  const sample = compose(draftFromBlueprint("steady-hands")!);
   return (
     <>
       {/* Hero */}
@@ -99,7 +99,7 @@ export default function Home() {
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="label">Example blueprint</p>
-                  <p className="font-display text-[30px] font-medium leading-tight tracking-[-0.015em]">Bell Ringer</p>
+                  <p className="font-display text-[30px] font-medium leading-tight tracking-[-0.015em]">Steady Hands</p>
                   <p className="font-mono text-[12px] text-ink-3">TOKEN / ETH · 1% fee · 2 modules</p>
                 </div>
                 <span className={`grid size-12 shrink-0 place-items-center rounded-[4px] font-display text-[26px] font-semibold text-white ${GRADE_BG[sample.risk.grade]}`}>{sample.risk.grade}</span>
@@ -117,7 +117,7 @@ export default function Home() {
               </div>
               <div className="mt-5 flex items-center justify-between border-t border-line pt-4">
                 <span className="font-mono text-[12px] text-ink-3">royalty 12% of add-ons · frozen at open</span>
-                <Link href="/blueprints/bell-ringer" className="text-[13.5px] text-blue underline underline-offset-4">
+                <Link href="/blueprints/steady-hands" className="text-[13.5px] text-blue underline underline-offset-4">
                   Inspect
                 </Link>
               </div>

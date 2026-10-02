@@ -24,11 +24,26 @@ export function formatEth(hexWei: string, digits = 4) {
 }
 
 /** Polls for a receipt; resolves true on success, false on revert. */
-export async function waitForReceipt(hash: string, timeoutMs = 120_000): Promise<{ ok: boolean; block: number }> {
+export type Receipt = {
+  ok: boolean;
+  block: number;
+  contractAddress: string | null;
+  gasUsed: bigint;
+  logs: { address: string; topics: string[]; data: string }[];
+};
+
+export async function waitForReceipt(hash: string, timeoutMs = 120_000): Promise<Receipt> {
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
-    const receipt = await rpc<{ status: string; blockNumber: string } | null>("eth_getTransactionReceipt", [hash]).catch(() => null);
-    if (receipt) return { ok: receipt.status === "0x1", block: Number(BigInt(receipt.blockNumber)) };
+    const receipt = await rpc<{ status: string; blockNumber: string; contractAddress: string | null; gasUsed: string; logs: Receipt["logs"] } | null>("eth_getTransactionReceipt", [hash]).catch(() => null);
+    if (receipt)
+      return {
+        ok: receipt.status === "0x1",
+        block: Number(BigInt(receipt.blockNumber)),
+        contractAddress: receipt.contractAddress ?? null,
+        gasUsed: BigInt(receipt.gasUsed ?? "0x0"),
+        logs: receipt.logs ?? [],
+      };
     await new Promise((resolve) => setTimeout(resolve, 400));
   }
   throw new Error("The transaction is taking longer than expected. Check it in the explorer.");

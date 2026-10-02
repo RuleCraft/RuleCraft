@@ -49,13 +49,17 @@ export default async function BlueprintPage({ params }: { params: Promise<{ slug
       </PageHead>
 
       <div className="grid-cols-1 wrap grid gap-10 py-12 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="min-w-0">
+        <div className="@container min-w-0">
           <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-5">
             <Stat label="Modules" value={c.modules.length} />
             <Stat label="Royalty" value={`${b.royaltyPct}%`} note="of add-on revenue" />
-            <Stat label="Pools" value="0" note="opens at launch" />
+            <Stat label="Pools" value="0" note="examples are not deployed" />
             <Stat label="Built for" value={<span className="text-[16px]">{b.persona}</span>} />
           </div>
+
+          <p className="mt-6 max-w-[640px] text-[14px] text-ink-2">
+            This example is not on chain. To earn its royalty yourself, open it in the composer, name it and press Publish: your wallet writes your own copy to the BlueprintRegistry.
+          </p>
 
           <h2 className="h-display mt-12 text-[30px]">The rules, in plain words</h2>
           <ul className="grid-cols-1 mt-4 grid gap-2.5 text-[15px] text-ink">

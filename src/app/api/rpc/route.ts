@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
  * public RPC host, so the browser reads through this server instead. Only
  * read methods pass; transactions always go through the user's own wallet.
  */
-const ALLOWED = new Set(["eth_call", "eth_getTransactionReceipt", "eth_blockNumber", "eth_getLogs", "eth_getBalance", "eth_chainId", "eth_getCode"]);
+const ALLOWED = new Set(["eth_call", "eth_getTransactionReceipt", "eth_blockNumber", "eth_getLogs", "eth_getBalance", "eth_chainId", "eth_getCode", "eth_estimateGas", "eth_gasPrice"]);
 const MAX_CALLS = 20;
 const MAX_LOG_SPAN = 20_000;
 

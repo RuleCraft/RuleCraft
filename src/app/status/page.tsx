@@ -5,7 +5,7 @@ import { BRAND } from "@/config/brand";
 
 export const metadata: Metadata = {
   title: "Status",
-  description: `What is live on ${BRAND.name} today, what is waiting for launch, and a live read of the chain.`,
+  description: `What is live on ${BRAND.name} today, what is waiting for deployment, and a live read of the chain.`,
 };
 
 type Row = { item: string; state: "live" | "design" | "launch"; note: string };
@@ -16,14 +16,14 @@ const ROWS: Row[] = [
   { item: "Hook scanner", state: "live", note: "Decodes any address and lists recent pools that use it." },
   { item: "v4 pool list", state: "live", note: "Read from PoolManager Initialize events, refreshed every two minutes." },
   { item: "Wallet connect", state: "live", note: "EIP-6963 wallets and optional WalletConnect; adds Robinhood Chain on connect." },
-  { item: "Launch form", state: "live", note: "Validates and shows what would be deployed. Deploy button opens at launch." },
-  { item: "Rule Craft contracts", state: "launch", note: "Not deployed. No address is published." },
+  { item: "Rule Craft contracts", state: "launch", note: "RuleCraftHook, RuleCraftLauncher and BlueprintRegistry are written and tested (unit, fuzz, mainnet fork). Unaudited. Not deployed yet; the owner deploys them from /deploy." },
+  { item: "Launch, publish, trade, claim", state: "launch", note: "Wired to the contracts. The buttons say \"Not deployed yet\" until the addresses are set." },
   { item: `${BRAND.symbol} contract`, state: "launch", note: "Not published. Any token using the name is not ours." },
-  { item: "Fee model", state: "design", note: "Protocol share and royalty bounds are design parameters." },
+  { item: "Fee model", state: "design", note: "Protocol share (default 10%) and treasury are fixed when the owner deploys the registry." },
 ];
 
 const TONE = { live: "pass", design: "blue", launch: "warn" } as const;
-const LABEL = { live: "Live", design: "Design", launch: "Opens at launch" } as const;
+const LABEL = { live: "Live", design: "Set at deploy", launch: "Not deployed yet" } as const;
 
 export default function StatusPage() {
   return (

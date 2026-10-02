@@ -7,6 +7,7 @@ import { draftFromBlueprint } from "@/lib/draft";
 import { ModuleGlyph } from "@/components/glyphs";
 import { Badge, PageHead, SectionTitle } from "@/components/ui/Page";
 import { ArrowRight } from "@/components/icons";
+import { OnchainBlueprints } from "@/components/onchain/OnchainBlueprints";
 
 export const metadata: Metadata = {
   title: "Rules & blueprints",
@@ -25,9 +26,9 @@ export default function RulesPage() {
           <Link href="/builder" className="btn btn-signal">
             Compose your own <ArrowRight />
           </Link>
-          <button type="button" disabled className="btn btn-line">
-            List a blueprint · Opens at launch
-          </button>
+          <Link href="/builder" className="btn btn-line">
+            Publish a blueprint
+          </Link>
         </div>
       </PageHead>
 
@@ -60,6 +61,15 @@ export default function RulesPage() {
               </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      <section className="border-t border-line">
+        <div className="wrap py-14">
+          <SectionTitle eyebrow="On chain" title="Published blueprints" lead="Read straight from the BlueprintRegistry contract. Anyone can publish; a published blueprint never changes, and its author earns the royalty on every pool that launches with it." />
+          <div className="mt-8">
+            <OnchainBlueprints />
+          </div>
         </div>
       </section>
 

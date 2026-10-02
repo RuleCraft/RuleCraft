@@ -3,6 +3,8 @@
 // 0x address (0x + 40 hex) into CA and the navbar pill, the footer block and
 // every copy button switch from "Published at launch" to a working copy.
 
+import { DEPLOYMENT } from "@/config/deployment";
+
 const CA = "0xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
 export const isAddress = (v: string): v is `0x${string}` => /^0x[0-9a-fA-F]{40}$/.test(v);
@@ -55,6 +57,12 @@ export const USDG = {
  */
 export const UNISWAP_V4 = {
   poolManager: "0x8366a39CC670B4001A1121B8F6A443A643e40951",
+  /* Periphery, from Uniswap's official v4 deployment list for chain 4663; bytecode checked 2 Oct 2026. */
+  positionManager: "0x58daec3116aae6D93017bAAea7749052E8a04fA7",
+  quoter: "0x8Dc178eFB8111BB0973Dd9d722ebeFF267c98F94",
+  stateView: "0xF3334192D15450CdD385c8B70e03f9A6bD9E673b",
+  universalRouter: "0x8876789976dEcBfCbBbe364623C63652db8C0904",
+  permit2: "0x000000000022D473030F116dDEE9F6B43aC78BA3",
   /** keccak256("Initialize(bytes32,address,address,uint24,int24,address,uint160,int24)") */
   initializeTopic: "0xdd466e674ea557f56295e2d0218a125ea4b4f0f6f3307b95f85e6110838d6438",
 } as const;
@@ -71,17 +79,13 @@ export const TOKEN = {
 };
 
 /**
- * Rule Craft contracts. Nothing of ours is deployed on mainnet yet; every
- * entry stays empty until launch and the site says so instead of inventing
- * numbers or addresses.
+ * Rule Craft contracts (unaudited). Addresses come from src/config/deployment.ts, the single
+ * place they are set; empty means not deployed yet and the site says so.
  */
 export const CONTRACTS: { name: string; role: string; address: string }[] = [
-  { name: "RuleHook", role: "The root v4 hook every Rule Craft pool points at", address: "" },
-  { name: "ModuleRegistry", role: "Approved rule modules and their parameter bounds", address: "" },
-  { name: "BlueprintRegistry", role: "Published blueprints, authors and royalty terms", address: "" },
-  { name: "PoolLauncher", role: "Token deploy, pool initialize and first liquidity in one call", address: "" },
-  { name: "RoyaltySplitter", role: "Routes each module's share to authors, LPs and treasury", address: "" },
-  { name: "RuleLens", role: "Read-only view of a pool's frozen rule set", address: "" },
+  { name: "RuleCraftHook", role: "The one v4 hook every Rule Craft pool points at. Applies each pool's frozen rules; pays royalties and protocol share to whoever is owed.", address: DEPLOYMENT.hook },
+  { name: "RuleCraftLauncher", role: "Mints a fixed-supply token, opens its pool with the rules, seeds the whole supply as liquidity, holds that position for the creator and routes exact-input swaps.", address: DEPLOYMENT.launcher },
+  { name: "BlueprintRegistry", role: "Published blueprints (rules, author, royalty). Fixes the treasury and protocol share at deployment.", address: DEPLOYMENT.registry },
 ];
 
 export function explorerAddress(address: string) {

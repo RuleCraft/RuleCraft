@@ -49,15 +49,14 @@ export default async function CrafterPage({ params }: Props) {
       <section className="wrap py-12">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6">
           <Stat label={`${CHAIN.nativeSymbol} balance`} value={chain.balance ?? "--"} note={chain.ok ? "Live" : "Unavailable"} />
-          <Stat label="Launches" value="0" note="Opens at launch" />
-          <Stat label="Blueprints" value="0" note="Opens at launch" />
-          <Stat label="Reuses" value="0" note="Opens at launch" />
-          <Stat label="Royalties" value="--" note="Opens at launch" />
+          <Stat label="Launches" value="--" note="Not deployed yet" />
+          <Stat label="Blueprints" value="--" note="Not deployed yet" />
+          <Stat label="Royalties" value="--" note="See portfolio" />
         </div>
         <div className="mt-10 border border-dashed border-line-2 bg-card p-8">
           <p className="font-display text-[22px]">No published rules yet</p>
           <p className="mt-2 max-w-[560px] text-[14.5px] text-ink-2">
-            The blueprint and launch registries are not deployed, so no wallet has a history here yet. When they are, this page lists every pool this address opened and every blueprint it published, straight from the chain.
+            Public crafter profiles are planned. The Rule Craft contracts are written but not deployed yet; once they are, a connected wallet sees its own launches and royalties on the portfolio page, read straight from the chain.
           </p>
           <Link href="/builder" className="btn btn-sm btn-line mt-5">
             Draft a rule set

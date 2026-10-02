@@ -14,17 +14,17 @@ const FLOW = [
   {
     step: "01",
     title: "A pool opts into add-ons",
-    body: "Snipe Guard, Size-Scaled Fee, Buy Burn, LP Stream, Milestone Pot. The plain LP fee is never touched: liquidity providers keep all of it.",
+    body: "Snipe Guard tax and LP Stream (burns are burned in full). The plain LP fee is never touched: liquidity providers keep all of it.",
   },
   {
     step: "02",
     title: "Add-on revenue is split",
-    body: `The blueprint author takes their royalty (${FEE_MODEL.royaltyMinPct}–${FEE_MODEL.royaltyMaxPct}% of add-on revenue, chosen at publish). The protocol keeps ${FEE_MODEL.protocolSharePct}% by default, hard-capped at ${FEE_MODEL.protocolShareCapPct}%. Both numbers are frozen per pool at creation.`,
+    body: `RuleCraftHook sets aside the blueprint author's royalty (${FEE_MODEL.royaltyMinPct}–${FEE_MODEL.royaltyMaxPct}% of add-on revenue, chosen at publish) and the protocol share (${FEE_MODEL.protocolSharePct}% by default, fixed when the registry is deployed, contract cap ${FEE_MODEL.protocolShareCapPct}%). The rest is donated to in-range LPs. Both rates are frozen per pool at creation.`,
   },
   {
     step: "03",
-    title: `Protocol share buys ${BRAND.symbol}`,
-    body: `The protocol's share is swapped for ${BRAND.symbol} on its own pool. Part is sent to the dead address, part is streamed to stakers. The split is a governance parameter set before launch.`,
+    title: "Protocol share goes to the treasury",
+    body: `The protocol share accrues to the treasury address fixed in the registry and is claimable only to it. Using it to buy back ${BRAND.symbol} is a treasury decision, not something the contracts do; it will be announced before it happens.`,
   },
 ];
 
@@ -39,7 +39,7 @@ export default function TokenPage() {
             {BRAND.symbol}, <span className="italic text-signal">paid by rules</span>
           </>
         }
-        lead={`The token of ${BRAND.name}. Its job is simple: when pools pay for the rules they run, a share of that revenue comes back to ${BRAND.symbol}. Nothing here is live until the contract is published.`}
+        lead={`The token of ${BRAND.name}. When pools pay for the rules they run, a share of that revenue goes to the protocol treasury. The ${BRAND.symbol} contract address is published at launch.`}
       >
         <div className="max-w-[640px]">
           <CaStrip />
@@ -73,8 +73,8 @@ export default function TokenPage() {
           <SectionTitle
             eyebrow="Value flow"
             title="Where the token's revenue comes from"
-            lead="Design, not live. These are the parameters the contracts are being written against; they can change before deployment and the docs will say so."
-            right={<Badge tone="blue">Design</Badge>}
+            lead="This is what the Rule Craft contracts do. They are written and tested, not deployed yet, and unaudited. The default protocol share is confirmed by the owner when the registry is deployed."
+            right={<Badge tone="warn">Unaudited</Badge>}
           />
           <ol className="grid-cols-1 mt-10 grid gap-4 md:grid-cols-3">
             {FLOW.map((f) => (
@@ -86,7 +86,7 @@ export default function TokenPage() {
             ))}
           </ol>
           <p className="mt-6 max-w-[760px] text-[14.5px] text-ink-2">
-            A pool that opts into nothing beyond its base fee pays the protocol nothing. The take is bounded per trade by the composer&apos;s {FEE_MODEL.hardCeilingPct}% hard ceiling, and every number is readable before the first swap. See the{" "}
+            A pool that opts into nothing beyond its base fee pays the protocol nothing. Burns are burned in full and pay nobody. Guard tax, burn and stream together are capped on chain at {FEE_MODEL.hardCeilingPct}% of a buy, and every number is readable before the first swap. See the{" "}
             <Link href="/docs" className="text-blue underline underline-offset-2">
               fee model in the docs
             </Link>
@@ -96,7 +96,7 @@ export default function TokenPage() {
       </section>
 
       <section className="wrap py-14">
-        <SectionTitle eyebrow="Contracts" title="What gets deployed" lead="Every address below is empty until launch. When one is published it appears here and in the docs at the same time." />
+        <SectionTitle eyebrow="Contracts" title="What gets deployed" lead="Rule Craft contracts appear here once the owner deploys them from /deploy. They are unaudited, have no owner and cannot be upgraded." />
         <div className="mt-8 overflow-x-auto border border-line bg-card">
           <table className="w-full min-w-[560px] text-left text-[14px]">
             <thead>
@@ -116,7 +116,7 @@ export default function TokenPage() {
                 <tr key={c.name} className="border-b border-line last:border-0">
                   <td className="px-4 py-3 font-medium">{c.name}</td>
                   <td className="px-4 py-3 text-ink-2">{c.role}</td>
-                  <td className="num px-4 py-3 text-ink-3 break-all">{c.address || "Published at launch"}</td>
+                  <td className="num px-4 py-3 text-ink-3 break-all">{c.address || "Not deployed yet"}</td>
                 </tr>
               ))}
             </tbody>

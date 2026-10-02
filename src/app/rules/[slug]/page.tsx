@@ -28,7 +28,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
   return (
     <>
       <PageHead
-        eyebrow={m.status === "planned" ? "Planned module" : "Core module"}
+        eyebrow={m.status === "planned" ? "Planned module" : "On-chain module"}
         title={
           <span className="flex items-center gap-4">
             <span className="grid size-14 shrink-0 place-items-center rounded-[6px] bg-ink text-paper">
@@ -47,7 +47,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
           <Link href={href} className="btn btn-signal">
             Compose with {m.name} <ArrowRight />
           </Link>
-          {m.status === "planned" ? <Badge tone="warn">Design stage · not launchable yet</Badge> : <Badge tone="blue">Contract published at launch</Badge>}
+          {m.status === "planned" ? <Badge tone="warn">Planned · not in the on-chain v1</Badge> : <Badge tone="blue">On-chain module · in RuleCraftHook (unaudited)</Badge>}
         </div>
       </PageHead>
 
@@ -57,7 +57,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
             <Stat label="Callbacks" value={m.callbacks.length} />
             <Stat label="Swap gas" value={m.gas.split(" ")[0]} note="estimate" />
             <Stat label="Touches" value={m.touches.join(" · ")} />
-            <Stat label="Pools" value="0" note="opens at launch" />
+            <Stat label="Pools" value="--" note="see Pools page" />
           </div>
 
           <h2 className="h-display mt-12 text-[30px]">How it behaves</h2>
@@ -101,7 +101,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
               </tbody>
             </table>
           </div>
-          <p className="mt-3 text-[13px] text-ink-3">Bounds are enforced by the module registry. Values are frozen when the pool is created.</p>
+          <p className="mt-3 text-[13px] text-ink-3">Bounds are enforced on chain by the registry, the launcher and the hook. Values are frozen when the pool is created.</p>
 
           <h2 className="h-display mt-12 text-[30px]">Permission bits</h2>
           <div className="mt-4">

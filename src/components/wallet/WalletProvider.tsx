@@ -70,7 +70,7 @@ type WalletState = {
   disconnect: () => void;
   clearError: () => void;
   /** Sends a transaction through the connected wallet and returns its hash. */
-  sendTransaction: (tx: { to: string; data?: string; value?: bigint }) => Promise<`0x${string}`>;
+  sendTransaction: (tx: { to?: string; data?: string; value?: bigint }) => Promise<`0x${string}`>;
   /** personal_sign over a UTF-8 message; no transaction, no gas. */
   signMessage: (message: string) => Promise<string>;
 };
@@ -350,7 +350,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   const clearError = useCallback(() => setError(null), []);
 
   const sendTransaction = useCallback(
-    async (tx: { to: string; data?: string; value?: bigint }) => {
+    async (tx: { to?: string; data?: string; value?: bigint }) => {
       if (!active || !remembered) throw new Error("Connect a wallet first.");
       const id = await readChainId(active.provider);
       if (id !== chain.id) await moveToRobinhood(active.provider);
@@ -360,7 +360,8 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
           params: [
             {
               from: remembered.address,
-              to: tx.to,
+              // No `to` means contract creation (used by the /deploy page).
+              ...(tx.to ? { to: tx.to } : {}),
               data: tx.data ?? "0x",
               value: `0x${(tx.value ?? 0n).toString(16)}`,
             },

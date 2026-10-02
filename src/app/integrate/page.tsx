@@ -15,16 +15,16 @@ const TRACKS: Track[] = [
     title: "Publish a module",
     who: "Hook authors",
     live: false,
-    body: "Add a new rule type that any pool can compose. Modules run inside the root hook, so they must declare their callbacks and keep their own state per pool.",
-    evidence: ["Source with a permissive licence and a pinned compiler version", "The callbacks it needs and why each one", "Parameter bounds and the worst-case take per trade", "Tests covering every bound and the interaction with each core module", "An independent review before it can be selected for launch"],
+    body: "Add a new rule type. The v1 hook has a fixed module set, so a new module means a new, reviewed hook version and new pools; existing pools never change.",
+    evidence: ["Source with a permissive licence and a pinned compiler version", "The callbacks it needs and why each one", "Parameter bounds and the worst-case take per trade", "Tests covering every bound and the interaction with each core module", "An independent review before it ships"],
   },
   {
     id: "blueprint",
     title: "Publish a blueprint",
     who: "Crafters",
     live: false,
-    body: "Package existing modules with tuned parameters and a royalty. No code: the composer produces the spec and the registry stores it.",
-    evidence: ["A name and a one-line purpose", "The spec exported from the composer", "Royalty within the published range", "A wallet that will receive royalties"],
+    body: "Package on-chain modules with tuned parameters and a royalty. No code: the composer's Publish button calls publish(name, rules, royaltyBps) on the BlueprintRegistry from your wallet.",
+    evidence: ["A name (up to 40 characters)", "Rules within the module bounds", "Royalty up to 25% of add-on revenue", "The wallet that publishes is the one that earns"],
     link: { href: "/builder", label: "Open the composer" },
   },
   {
@@ -32,8 +32,8 @@ const TRACKS: Track[] = [
     title: "Embed launches",
     who: "Launchpads and front-ends",
     live: false,
-    body: "Let your users open a token with a Rule Craft rule set from your own interface, with the rules shown before they sign.",
-    evidence: ["Which blueprints or modules you expose", "How your interface shows the rule summary and risk grade", "The address that receives any front-end fee"],
+    body: "Let your users open a token with a Rule Craft rule set from your own interface by calling RuleCraftLauncher.launch, with the rules shown before they sign.",
+    evidence: ["Which blueprints or modules you expose", "How your interface shows the rule summary and risk grade", "That you quote with the v4 Quoter and use exact-input swaps only"],
   },
   {
     id: "read",
@@ -58,8 +58,8 @@ const TRACKS: Track[] = [
     title: "Agent access",
     who: "Autonomous agents",
     live: false,
-    body: "A signed manifest of contract addresses and call encodings so an agent can quote, launch and claim without scraping pages. Published with the contracts.",
-    evidence: ["Deployed addresses (none yet)", "A versioned manifest with a checksum"],
+    body: "Contract calls an agent can make directly: quote with the v4 Quoter, trade with swapExactIn, read rules with poolRules, claim with claim. ABIs are in the repository.",
+    evidence: ["Deployed addresses (not deployed yet)", "The ABIs from the contracts folder"],
     link: { href: "/agents", label: "What is live for agents" },
   },
 ];
@@ -82,7 +82,7 @@ export default function IntegratePage() {
             <article key={t.id} id={t.id} className="tick flex flex-col border border-line bg-card p-6">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="label">{t.who}</p>
-                {t.live ? <Badge tone="pass">Live</Badge> : <Badge tone="warn">Opens at launch</Badge>}
+                {t.live ? <Badge tone="pass">Live</Badge> : <Badge tone="warn">Not deployed yet</Badge>}
               </div>
               <h2 className="mt-2 font-display text-[26px] leading-tight">{t.title}</h2>
               <p className="mt-3 text-[15px] leading-[1.6] text-ink-2">{t.body}</p>

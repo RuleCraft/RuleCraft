@@ -8,3 +8,8 @@ build
 .DS_Store
 .vercel
 npm-debug.log*
+contracts/lib
+contracts/out
+contracts/cache
+contracts/broadcast
+.next-local

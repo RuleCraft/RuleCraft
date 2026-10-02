@@ -7,14 +7,14 @@ import { Prose, Updated } from "@/components/info/Prose";
 
 export const metadata: Metadata = {
   title: "Methodology",
-  description: "Where every number on Rule Craft comes from, what is live, what is design, and how the risk grade is computed.",
+  description: "Where every number on Rule Craft comes from, what is live, what the contracts enforce, and how the risk grade is computed.",
 };
 
 const KINDS = [
   { tone: "pass" as const, label: "Live", body: "Read from the chain at request time: blocks, gas, balances, v4 pools, hook bytecode." },
-  { tone: "blue" as const, label: "Design", body: "Parameters the contracts are being written against: fee shares, caps, module bounds, gas estimates." },
+  { tone: "blue" as const, label: "Contract rules", body: "Bounds and shares enforced by the Rule Craft contracts (unaudited): module bounds, royalty cap, protocol share. Gas figures are estimates." },
   { tone: "ink" as const, label: "Example", body: "Blueprints the team wrote to illustrate rule sets. No pools, no authors on chain." },
-  { tone: "warn" as const, label: "Opens at launch", body: "Anything that needs our contracts: launches, royalties, pots, token supply." },
+  { tone: "warn" as const, label: "Not deployed yet", body: "Anything that needs the Rule Craft contracts before the owner deploys them: launches, swaps on Rule Craft pools, royalties, the token supply." },
 ];
 
 const FACTORS = [
@@ -84,7 +84,7 @@ export default function MethodologyPage() {
         <ul>
           <li>A failed chain read shows &ldquo;Read failed&rdquo; or &ldquo;--&rdquo;, never zero dressed as data.</li>
           <li>APIs return HTTP 503 rather than an empty list when the chain cannot be reached.</li>
-          <li>Buttons that would write to contracts we have not deployed are disabled and say &ldquo;Opens at launch&rdquo;.</li>
+          <li>Buttons that would write to contracts that are not deployed are disabled and say &ldquo;Not deployed yet&rdquo;.</li>
         </ul>
         <p>
           Questions about a number? Read the <Link href="/docs">docs</Link> or ask on X.

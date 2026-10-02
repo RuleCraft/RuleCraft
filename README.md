@@ -23,24 +23,28 @@ Rule Craft turns hook logic into bounded, reusable **rule modules** behind one h
 - **Launch:** open a new token directly into a pool that already carries its rules (pool-first), or give a token that already trades a second pool with rules.
 - **Read:** every pool page shows its rules, parameters, take and a risk grade. The scanner decodes any v4 hook on Robinhood Chain from its address.
 
-Rule modules in the first release: Snipe Guard, Size-Scaled Fee, Buy Burn, LP Stream, Milestone Pot, Liquidity Timelock. Arb Recapture is planned.
+Rule modules on chain in v1: Snipe Guard, Size-Scaled Fee, Buy Burn, LP Stream, Liquidity Timelock. Milestone Pot and Arb Recapture are planned.
+
+> **Unaudited.** The contracts in `contracts/` have unit, fuzz and mainnet-fork tests but no independent audit. There is no owner, no upgrade path and no admin function that can move user or pool funds.
 
 ## What you can try
 
-**Live now**
+**Live now (reads Robinhood Chain directly)**
 
 - **Composer** (`/builder`): pick modules, tune parameters, get the hook permission bits, a callback map, a worked buy, conflict checks, a generated JSON config and a risk read.
 - **Live v4 pools** (`/app`, `/pool/<id>`): recent Uniswap v4 pools on Robinhood Chain, read straight from the PoolManager, with every hook decoded.
 - **Hook scanner** (`/scan`, `/scan/<address>`): paste any hook address or pool id.
-- **Launch form** (`/launch`): five validated steps that show every call the launcher would make.
-- **Existing token** (`/existing`): reads any ERC-20 on Robinhood Chain and shows the pool that would open.
 - **Wallet connect**, live ETH and USDG balances, docs, explainers, JSON endpoints (`/api/chain`, `/api/pools`, `/api/token`, `/llms.txt`).
 
-**Coming at launch**
+**Live as soon as the contracts are deployed** (until then the site says "Not deployed yet")
 
-- Rule Craft contracts (hook, module and blueprint registries, launcher, royalty splitter) and the `$RULECRAFT` token contract.
-- Deploying, publishing blueprints, claiming royalties and pots. These buttons are visible but disabled and say "Opens at launch".
-- The example blueprints on the site are written by the team to show the format; they are not deployed.
+- **Launch** (`/launch`): one transaction mints a fixed-supply token, opens its Uniswap v4 pool with your rules frozen, and seeds the whole supply as liquidity. Optional dev buy under the same rules.
+- **Publish blueprints** from the composer; launches that use one pay its author a royalty.
+- **Trade** Rule Craft pools on their pool page (quotes from Uniswap's v4 Quoter), **claim royalties** in `/portfolio`, collect or withdraw founding liquidity as the creator.
+
+**Planned**
+
+- Milestone Pot and Arb Recapture modules, rules for tokens that already trade, the `$RULECRAFT` token contract.
 
 ## Run it locally
 
@@ -84,10 +88,13 @@ The wallet dialog adds the network for you on connect. To add it by hand:
 ```
 src/
   app/                 routes (App Router) and API routes under app/api
-  components/          UI: rules/ (composer, launch, read-outs), pools/, wallet/, docs/, info/, site/
-  config/              brand.ts (name, CA, chain, contracts), modules.ts, blueprints.ts, nav.ts, wallets.ts
+  components/          UI: rules/ (composer, launch), onchain/ (deploy, swap, publish, claims), pools/, wallet/, docs/
+  config/              brand.ts (name, CA, chain), deployment.ts (contract addresses), modules.ts, blueprints.ts
   content/             docs, explainers and updates
-  lib/                 compose.ts (rules to permissions, take, risk), hooks.ts (v4 flags), chain-server.ts (RPC reads)
+  lib/                 compose.ts (rules to permissions, take, risk), onchain.ts (contract calls), hooks.ts, chain-server.ts
+  contracts/           compiled ABI + bytecode used by the site
+contracts/             Foundry project: src/ (Solidity), test/ (unit, fuzz, fork), setup.sh
+scripts/               export-artifacts.mjs
 public/                brand images and wallet logos (WebP)
 ```
 
@@ -96,6 +103,37 @@ public/                brand images and wallet logos (WebP)
 `$RULECRAFT` on Robinhood Chain (chain id 4663): **published at launch.**
 The address is set in one place, `src/config/brand.ts`. Until it is published, every copy button on the site is disabled. Always verify a token by its address and chain, never by its ticker.
 
+## Contracts
+
+| Contract | Role |
+|---|---|
+| `RuleCraftHook` | The single Uniswap v4 hook (permission mask `0x20C4`). Applies each pool's frozen rules: size-scaled LP fee, snipe guard cap and tax, buy burn, LP stream. Pays royalties and protocol share to whoever is owed. |
+| `RuleCraftLauncher` | Launches a token into its pool, holds the founding liquidity (optionally time-locked) for its creator, routes exact-input swaps. |
+| `BlueprintRegistry` | Published rule sets with author and royalty. Treasury and protocol share are fixed at deployment. |
+
+Build and test them (needs [Foundry](https://getfoundry.sh) and git):
+
+```bash
+cd contracts
+./setup.sh            # fetches the pinned Uniswap v4-core sources into contracts/lib
+forge build
+forge test            # unit + fuzz tests
+FORK_URL=https://rpc.mainnet.chain.robinhood.com forge test --match-contract ForkTest
+```
+
+After changing a contract, run `node scripts/export-artifacts.mjs` from the project root so the site picks up the new ABI and bytecode.
+
+## How to deploy the contracts
+
+Deploying is done from the site, with your own wallet. No private key ever touches the code.
+
+1. Run the site (below) or open the deployed site, go to `/deploy` and connect the wallet that should deploy.
+2. Step 1 deploys `BlueprintRegistry` with the treasury address and protocol share (basis points, max 3000).
+3. Step 2 deploys `RuleCraftLauncher`, pointed at the Uniswap v4 PoolManager on Robinhood Chain.
+4. Step 3 mines a CREATE2 salt in your browser so the hook address ends in its permission bits, then deploys `RuleCraftHook` through the standard deterministic deployer.
+5. Step 4 wires the launcher to the hook (one call, same wallet as step 2, allowed once).
+6. Copy the printed snippet into `src/config/deployment.ts`, commit and redeploy the site. Use "Verify on chain" to check the wiring.
+
 ## Disclaimer
 
-Rule Craft is pre-launch software. Risk grades are a heuristic read of permissions and settings, not an audit. Nothing here is financial advice.
+Rule Craft is pre-launch software and its contracts are unaudited. Risk grades are a heuristic read of permissions and settings, not an audit. Nothing here is financial advice.

@@ -9,6 +9,8 @@ import { DYNAMIC_FEE_FLAG, FLAGS, FLAG_BY_KEY, flagProblems, maskFor, type FlagK
  * agree.
  */
 
+export const ROOT_FLAGS: FlagKey[] = ["beforeInitialize", "beforeSwap", "afterSwap", "afterSwapReturnDelta"];
+
 export type Draft = {
   name: string;
   modules: string[];
@@ -61,8 +63,10 @@ export function compose(draft: Draft): Composition {
   const modules = draft.modules.map((s) => MODULE_BY_SLUG[s]).filter(Boolean);
   const has = (slug: string) => draft.modules.includes(slug);
 
-  const set = new Set<FlagKey>();
-  for (const m of modules) for (const c of m.callbacks) set.add(c);
+  // Every Rule Craft pool points at the same hook, so its address always carries these
+  // four bits; the pool's rule set decides what each callback does. Planned modules add theirs.
+  const set = new Set<FlagKey>(ROOT_FLAGS);
+  for (const m of modules) if (m.status === "planned") for (const c of m.callbacks) set.add(c);
   const callbacks = FLAGS.map((f) => f.key).filter((k) => set.has(k));
   const mask = maskFor(callbacks);
   const dynamicFee = modules.some((m) => m.dynamicFee);
@@ -105,8 +109,9 @@ export function compose(draft: Draft): Composition {
   }
   if (has("lp-timelock") && p(draft, "lp-timelock", "lockDays") < 7)
     issues.push({ level: "warn", text: "A lock under 7 days protects traders very little." });
+  for (const m of modules)
+    if (m.status === "planned") issues.push({ level: "warn", text: `${m.name} is a planned module. A rule set can be drafted with it but cannot launch with it yet.` });
   if (has("arb-recapture")) {
-    issues.push({ level: "warn", text: "Arb Recapture is a planned module. A pool can be drafted with it but cannot launch with it yet." });
     if (has("size-fee")) issues.push({ level: "info", text: "Size-Scaled Fee and Arb Recapture both set the fee in beforeSwap; the size fee is computed first and the recapture charge is added on top." });
   }
   if (draft.royaltyPct > FEE_MODEL.royaltyMaxPct) issues.push({ level: "error", text: `Royalty is capped at ${FEE_MODEL.royaltyMaxPct}% of add-on revenue.` });
@@ -134,7 +139,12 @@ export function compose(draft: Draft): Composition {
       points: has("lp-timelock") ? 3 : 0,
       note: has("lp-timelock") ? `Founding liquidity locked ${p(draft, "lp-timelock", "lockDays")} days; other LPs exit freely.` : "Every LP can leave at any time.",
     },
-    { label: "Unreleased code", max: 5, points: has("arb-recapture") ? 5 : 0, note: has("arb-recapture") ? "Includes a planned module." : "Only core modules." },
+    {
+      label: "Unreleased code",
+      max: 5,
+      points: modules.some((m) => m.status === "planned") ? 5 : 0,
+      note: modules.some((m) => m.status === "planned") ? "Includes a planned module." : "Only on-chain modules.",
+    },
   ];
   const score = Math.min(100, factors.reduce((s, f) => s + f.points, 0));
   const risk: Risk = { score, ...gradeFor(score), factors };
@@ -170,7 +180,7 @@ export function compose(draft: Draft): Composition {
     {
       name: draft.name || "Untitled rule set",
       chainId: 4663,
-      poolKey: { currency0: "ETH (address(0))", currency1: "<token>", fee: dynamicFee ? "0x800000 (dynamic)" : poolFee, tickSpacing: dynamicFee ? 60 : spacingFor(draft.baseFeePct), hooks: `<RuleHook address ending in mask ${mask.hex}>` },
+      poolKey: { currency0: "ETH (address(0))", currency1: "<token>", fee: dynamicFee ? "0x800000 (dynamic)" : poolFee, tickSpacing: dynamicFee ? 60 : spacingFor(draft.baseFeePct), hooks: `<RuleCraftHook address ending in mask ${mask.hex}>` },
       permissions: Object.fromEntries(FLAGS.map((f) => [f.key, set.has(f.key)])),
       modules: modules.map((m) => ({ module: m.slug, status: m.status, params: draft.params[m.slug] ?? {} })),
       royaltyPctOfAddOns: draft.royaltyPct,

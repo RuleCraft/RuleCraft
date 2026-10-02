@@ -12,9 +12,9 @@ const ENDPOINTS = [
   { method: "GET", path: "/api/chain", live: true, body: "Chain id, latest block, gas price, and whether the v4 PoolManager has bytecode. HTTP 503 when the chain cannot be read." },
   { method: "GET", path: "/api/pools", live: true, body: "Recent Uniswap v4 pools from PoolManager Initialize events: currencies, fee, tick spacing, hook address and decoded permission flags. Cached two minutes; failures are not cached." },
   { method: "GET", path: "/api/token?address=0x…", live: true, body: "ERC-20 name, symbol, decimals and total supply for any address, plus whether it has code." },
-  { method: "POST", path: "/api/rpc", live: true, body: "Read-only JSON-RPC relay: eth_call, eth_getCode, eth_getBalance, eth_getLogs (≤ 20,000 blocks), eth_blockNumber, eth_chainId, eth_getTransactionReceipt. Up to 20 calls per batch." },
+  { method: "POST", path: "/api/rpc", live: true, body: "Read-only JSON-RPC relay: eth_call, eth_getCode, eth_getBalance, eth_getLogs (≤ 20,000 blocks), eth_blockNumber, eth_chainId, eth_getTransactionReceipt, eth_estimateGas, eth_gasPrice. Up to 20 calls per batch." },
   { method: "GET", path: "/llms.txt", live: true, body: "Plain-text summary of the product, routes, endpoints and contract status." },
-  { method: "GET", path: "Signed manifest", live: false, body: "Contract addresses, ABIs and call encodings for quoting, launching and claiming. Published with the contracts." },
+  { method: "—", path: "Contracts", live: false, body: "RuleCraftLauncher (launch, swapExactIn), RuleCraftHook (poolRules, owed, claim), BlueprintRegistry (count, get, publish). ABIs are in the repository; addresses appear on /docs/reference/contracts once deployed. Unaudited." },
 ];
 
 const RULES = [
@@ -62,7 +62,7 @@ export default function AgentsPage() {
                 {e.path}
               </p>
               <p className="text-[14.5px] leading-[1.55] text-ink-2">{e.body}</p>
-              <div>{e.live ? <Badge tone="pass">Live</Badge> : <Badge tone="warn">Opens at launch</Badge>}</div>
+              <div>{e.live ? <Badge tone="pass">Live</Badge> : <Badge tone="warn">Not deployed yet</Badge>}</div>
             </div>
           ))}
         </div>

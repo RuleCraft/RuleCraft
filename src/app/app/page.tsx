@@ -5,6 +5,7 @@ import { readPoolIndex } from "@/lib/chain-server";
 import { ZERO_ADDRESS } from "@/lib/hooks";
 import { PageHead, Stat } from "@/components/ui/Page";
 import { PoolExplorer } from "@/components/pools/PoolExplorer";
+import { RuleCraftPools } from "@/components/onchain/RuleCraftPools";
 
 export const dynamic = "force-dynamic";
 
@@ -54,11 +55,19 @@ export default function PoolsPage() {
             <a href={explorerAddress(UNISWAP_V4.poolManager)} target="_blank" rel="noreferrer" className="font-mono text-[15px] text-blue underline underline-offset-4">
               {shortAddress(UNISWAP_V4.poolManager)}
             </a>
-            . Each row is a pool opened in roughly the last eight hours, with its hook decoded from the address bits. None of these are Rule Craft pools: ours open at launch.
+            . Each row is a pool opened in roughly the last eight hours, with its hook decoded from the address bits. Rule Craft pools are listed first.
           </>
         }
       />
-      <section className="wrap py-10">
+      <section className="wrap pt-10">
+        <h2 className="h-display text-[30px]">Rule Craft pools</h2>
+        <p className="mt-2 max-w-[640px] text-[15px] text-ink-2">Launched through the Rule Craft launcher; read straight from the contract. Unaudited.</p>
+        <div className="mt-5">
+          <RuleCraftPools />
+        </div>
+        <h2 className="h-display mt-12 text-[30px]">All new v4 pools</h2>
+      </section>
+      <section className="wrap py-6">
         <Suspense
           fallback={
             <div className="card grid place-items-center p-12" data-pools-loading>

@@ -93,7 +93,7 @@ export default async function IntegrationsPage() {
           <div className="card p-6">
             <AddressJump base="/scan" placeholder="0x… hook address" cta="Scan hook" />
             <button type="button" disabled className="btn btn-signal mt-4 w-full">
-              Request review · Opens at launch
+              Review queue · planned
             </button>
             <p className="mt-3 text-[13px] text-ink-3">
               Building something bigger? See the{" "}

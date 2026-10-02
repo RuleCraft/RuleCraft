@@ -152,7 +152,7 @@ export function ExistingForm() {
 
       <aside className="grid grid-cols-1 content-start gap-4">
         <div className="card tick p-5" data-existing-review>
-          <p className="label">Would be created</p>
+          <p className="label">Would be created (planned)</p>
           {tokenOk ? (
             <p className="mt-3 break-all font-mono text-[12.5px] leading-[1.7] text-ink">
               PoolKey(
@@ -165,16 +165,16 @@ export function ExistingForm() {
               <br />
               &nbsp;tickSpacing {c.dynamicFee ? 60 : spacingFor(fee)},
               <br />
-              &nbsp;hooks RuleHook {c.mask.hex}
+              &nbsp;hooks RuleCraftHook (address ends in {c.mask.hex})
               <br />)
             </p>
           ) : (
             <p className="mt-3 text-[14px] text-ink-3">Read a token first.</p>
           )}
           <button type="button" disabled className="btn btn-signal mt-5 w-full" data-open-pool>
-            Open pool · Opens at launch
+            Planned: v1 launches new tokens only
           </button>
-          <p className="mt-2 text-[12px] text-ink-3">You bring your own liquidity for an existing token. Nothing is minted.</p>
+          <p className="mt-2 text-[12px] text-ink-3">For an existing token you would bring your own liquidity and nothing would be minted. The on-chain v1 launcher only creates new tokens, so this page is a draft and a read.</p>
         </div>
         <RiskCard risk={c.risk} />
         <Badge tone="blue">Read live from {CHAIN.name}</Badge>

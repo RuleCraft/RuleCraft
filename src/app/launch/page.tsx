@@ -7,8 +7,9 @@ export const metadata: Metadata = {
   description: "Five steps to a new token whose pool carries your rules. Every check runs before anything is signed.",
 };
 
-export default async function LaunchPage({ searchParams }: { searchParams: Promise<{ rules?: string }> }) {
-  const { rules } = await searchParams;
+export default async function LaunchPage({ searchParams }: { searchParams: Promise<{ rules?: string; bp?: string }> }) {
+  const { rules, bp } = await searchParams;
+  const blueprintId = bp && /^\d{1,9}$/.test(bp) ? Number(bp) : 0;
   return (
     <>
       <PageHead
@@ -18,9 +19,9 @@ export default async function LaunchPage({ searchParams }: { searchParams: Promi
             A token is born <span className="italic text-signal">inside</span> its pool.
           </>
         }
-        lead="Name it, pick its rules and its opening price. The review shows every call the launcher would make. Deploying opens when the Rule Craft contracts are published; until then, drafts stay in your browser."
+        lead="Name it, pick its rules and its opening price. The review shows every call the launcher makes, then one transaction mints the token, opens its Uniswap v4 pool with the rules frozen, and seeds the whole supply as liquidity."
       />
-      <LaunchForm key={rules ?? "local"} initial={rules ?? null} />
+      <LaunchForm key={`${rules ?? "local"}-${blueprintId}`} initial={rules ?? null} blueprintId={blueprintId} />
     </>
   );
 }

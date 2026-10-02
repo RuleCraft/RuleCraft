@@ -12,7 +12,7 @@ import { ModuleGlyph } from "@/components/glyphs";
 import { Badge } from "@/components/ui/Page";
 import { IssueList, PermissionGrid, RiskCard, TakeRow } from "@/components/rules/Readout";
 import { useWallet } from "@/components/wallet/WalletProvider";
-import { ConnectButton } from "@/components/wallet/WalletButton";
+import { OnchainLaunch } from "@/components/onchain/OnchainLaunch";
 import { ArrowRight, CheckIcon } from "@/components/icons";
 
 type Details = { name: string; symbol: string; supply: number; about: string; site: string; x: string };
@@ -46,7 +46,7 @@ export function detailProblems(d: Details): Record<string, string> {
   return out;
 }
 
-export function LaunchForm({ initial }: { initial?: string | null }) {
+export function LaunchForm({ initial, blueprintId = 0 }: { initial?: string | null; blueprintId?: number }) {
   const { address, onRobinhoodChain } = useWallet();
   const [form, setForm] = useState<Form>(() => {
     const d = decodeDraft(initial);
@@ -199,7 +199,7 @@ export function LaunchForm({ initial }: { initial?: string | null }) {
                 <div className="mt-4">
                   <IssueList issues={c.issues.filter((i) => i.level !== "info")} />
                 </div>
-                {planned ? <p className="mt-3 text-[13px] text-danger">Arb Recapture is planned. Remove it in the composer to continue.</p> : null}
+                {planned ? <p className="mt-3 text-[13px] text-danger">{c.modules.filter((m) => m.status === "planned").map((m) => m.name).join(" and ")} {c.modules.filter((m) => m.status === "planned").length > 1 ? "are" : "is"} not in the on-chain release. Remove it in the composer to continue.</p> : null}
               </div>
               {nav}
             </div>
@@ -306,7 +306,7 @@ export function LaunchForm({ initial }: { initial?: string | null }) {
                 </ReviewItem>
                 <ReviewItem n={2} title="Initialize the v4 pool">
                   <span className="block break-all font-mono text-[12.5px]">
-                    currency0 ETH · currency1 {form.details.symbol || "TOKEN"} · fee {c.dynamicFee ? "0x800000 (dynamic)" : `${c.poolFee} (${feeLabel(c.poolFee)})`} · tickSpacing {c.dynamicFee ? 60 : spacingFor(form.rules.baseFeePct)} · hooks RuleHook ({c.mask.hex})
+                    currency0 ETH · currency1 {form.details.symbol || "TOKEN"} · fee {c.dynamicFee ? "0x800000 (dynamic)" : `${c.poolFee} (${feeLabel(c.poolFee)})`} · tickSpacing {c.dynamicFee ? 60 : spacingFor(form.rules.baseFeePct)} · hooks RuleCraftHook ({c.mask.hex})
                   </span>
                 </ReviewItem>
                 <ReviewItem n={3} title="Freeze the rule set">
@@ -324,7 +324,7 @@ export function LaunchForm({ initial }: { initial?: string | null }) {
                 <p className="label mb-2">Permission bits</p>
                 <PermissionGrid flags={c.callbacks} />
               </div>
-              <div className="grid-cols-1 mt-8 grid gap-3 border-t border-line pt-5 sm:grid-cols-[1fr_auto] sm:items-center">
+              <div className="mt-8 grid grid-cols-1 gap-3 border-t border-line pt-5">
                 <p className="text-[13.5px] text-ink-2">
                   {address ? (
                     <>
@@ -334,12 +334,15 @@ export function LaunchForm({ initial }: { initial?: string | null }) {
                     "Connect a wallet to see who would sign."
                   )}
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {!address ? <ConnectButton className="btn btn-line" /> : null}
-                  <button type="button" disabled className="btn btn-signal" data-deploy title="The launcher contract is published at launch">
-                    Deploy · Opens at launch
-                  </button>
-                </div>
+                <OnchainLaunch
+                  ready={firstBlocked === -1}
+                  draft={form.rules}
+                  name={form.details.name.trim()}
+                  symbol={form.details.symbol}
+                  supply={form.details.supply}
+                  devBuyEth={form.devBuyEth}
+                  blueprintId={blueprintId}
+                />
               </div>
               {nav}
             </div>

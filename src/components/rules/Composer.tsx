@@ -10,6 +10,7 @@ import { ModuleGlyph } from "@/components/glyphs";
 import { Badge } from "@/components/ui/Page";
 import { CallbackList, IssueList, LifecycleTrack, PermissionGrid, RiskCard, TakeRow } from "@/components/rules/Readout";
 import { ArrowRight, CheckIcon, CopyIcon } from "@/components/icons";
+import { PublishBlueprint } from "@/components/onchain/PublishBlueprint";
 
 const STORE = "rulecraft.draft";
 
@@ -385,15 +386,13 @@ export function Composer({ initial }: { initial?: string | null }) {
               >
                 Launch with these rules <ArrowRight />
               </Link>
-              <button type="button" disabled className="btn btn-line w-full" title="Blueprint publishing opens at launch">
-                Publish as blueprint · Opens at launch
-              </button>
+              <PublishBlueprint draft={draft} />
             </div>
             <p className="mt-3 text-[12.5px] text-ink-3">
               {errors > 0
                 ? `Fix ${errors} blocking check${errors > 1 ? "s" : ""} before launching.`
                 : planned
-                  ? "Includes a planned module: the launch form will show it but cannot deploy it."
+                  ? "Includes a planned module: the launch form will show it but cannot launch it."
                   : "The launch form checks everything again before anything is signed."}
             </p>
           </div>

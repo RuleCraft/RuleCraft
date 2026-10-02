@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const WHAT = [
-  { k: "Launches", v: "Pools a wallet opened with a rule set, read from the launcher registry." },
+  { k: "Launches", v: "Pools a wallet opened with a rule set, read from the RuleCraftLauncher." },
   { k: "Blueprints", v: "Rule sets the wallet published for others to reuse, with its royalty terms." },
   { k: "Reuses", v: "How many pools other people opened with those blueprints." },
   { k: "Royalties", v: "Claimable and claimed add-on revenue, per blueprint." },
@@ -46,10 +46,10 @@ export default function CraftersPage() {
             <p className="num text-[40px] leading-none text-ink">0</p>
             <p className="mt-2 font-display text-[22px]">published profiles</p>
             <p className="mx-auto mt-2 max-w-[420px] text-[14.5px] text-ink-2">
-              Profiles open at launch, when the blueprint registry is deployed. Until then nobody has launches or royalties to show, including us.
+              Public profiles are planned. Until the contracts are deployed nobody has launches or royalties to show, including us; after that, your own appear on the portfolio page.
             </p>
             <div className="mt-4 flex justify-center">
-              <Badge tone="warn">Opens at launch</Badge>
+              <Badge tone="warn">Not deployed yet</Badge>
             </div>
           </div>
           <div className="mt-8">

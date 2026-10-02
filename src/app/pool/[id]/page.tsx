@@ -7,6 +7,7 @@ import { readHook, readPoolIndex } from "@/lib/chain-server";
 import { ZERO_ADDRESS, feeLabel } from "@/lib/hooks";
 import { PageHead, Stat } from "@/components/ui/Page";
 import { HookPanel } from "@/components/pools/HookPanel";
+import { OnchainPool } from "@/components/onchain/OnchainPool";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,7 @@ async function PoolBody({ id }: { id: string }) {
         <p className="font-display text-[24px] text-ink">{index.ok ? "This pool is not in the recent index." : "The chain could not be read right now."}</p>
         <p className="mt-2 max-w-[620px] text-[14.5px] text-ink-2">
           {index.ok
-            ? "The index covers pools opened in roughly the last eight hours. For an older pool, paste its hook address into the scanner: the permission read works for any hook."
+            ? "The index covers pools opened in roughly the last eight hours. A Rule Craft pool is read directly from its contracts above; for any other older pool, paste its hook address into the scanner."
             : "Nothing is shown rather than a guess. Try again in a minute."}
         </p>
         <Link href="/scan" className="btn btn-line mt-5">
@@ -95,13 +96,14 @@ export default async function PoolPage({ params }: { params: Promise<{ id: strin
       <PageHead
         eyebrow="Pool rules · live read"
         title={<span className="break-all font-mono text-[clamp(20px,3vw,30px)] tracking-normal">{shortAddress(id, 14, 10)}</span>}
-        lead="What this Uniswap v4 pool's hook is allowed to do, decoded from chain data. Third-party pool: Rule Craft did not create it and does not vouch for it."
+        lead="What this Uniswap v4 pool's hook is allowed to do, decoded from chain data. Pools launched through Rule Craft also show their exact rules and a swap box."
         crumbs={[
           { href: "/app", label: "Pools" },
           { href: `/pool/${id}`, label: shortAddress(id, 6, 4) },
         ]}
       />
       <section className="wrap py-10">
+        <OnchainPool poolId={id} />
         <Suspense fallback={<p className="font-mono text-[13px] text-ink-3">Reading the pool…</p>}>
           <PoolBody id={id} />
         </Suspense>
