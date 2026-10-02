@@ -23,7 +23,7 @@ export const BRAND = {
   x: "https://x.com/rulecraftfun",
   xHandle: "@rulecraftfun",
   /** Public GitHub repository. Empty hides every GitHub link on the site. */
-  github: "https://github.com/" as string,
+  github: "https://github.com/RuleCraft/RuleCraft" as string,
   ca: CA,
 } as const;
 

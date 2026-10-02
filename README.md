@@ -3,7 +3,7 @@
 **Craft your rules. Earn forever.**
 Modular infrastructure for Uniswap v4 hooks, on Robinhood Chain.
 
-Website: https://rulecraft.fun · X: https://x.com/rulecraftfun
+Website: https://rulecraft.fun · X: https://x.com/rulecraftfun · Source: https://github.com/RuleCraft/RuleCraft
 
 ## The problem
 

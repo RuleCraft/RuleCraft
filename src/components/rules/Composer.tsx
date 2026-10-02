@@ -247,7 +247,7 @@ export function Composer({ initial }: { initial?: string | null }) {
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="label">Play a buy</p>
               <label className="flex items-center gap-2 text-[13px] text-ink-2">
-                <input type="checkbox" checked={inGuard} onChange={(e) => setInGuard(e.target.checked)} className="size-4 accent-[#df4f1c]" disabled={!draft.modules.includes("snipe-guard")} />
+                <input type="checkbox" checked={inGuard} onChange={(e) => setInGuard(e.target.checked)} className="size-4 accent-[#d75732]" disabled={!draft.modules.includes("snipe-guard")} />
                 inside the guard window
               </label>
             </div>
