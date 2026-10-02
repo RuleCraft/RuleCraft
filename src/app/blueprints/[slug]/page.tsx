@@ -44,7 +44,7 @@ export default async function BlueprintPage({ params }: { params: Promise<{ slug
           <Link href={`/launch?rules=${code}`} className="btn btn-line">
             Use for a launch
           </Link>
-          <Badge>Example · written by the team · not deployed</Badge>
+          <Badge>Example · written by the team · not published on chain</Badge>
         </div>
       </PageHead>
 
@@ -53,7 +53,7 @@ export default async function BlueprintPage({ params }: { params: Promise<{ slug
           <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-5">
             <Stat label="Modules" value={c.modules.length} />
             <Stat label="Royalty" value={`${b.royaltyPct}%`} note="of add-on revenue" />
-            <Stat label="Pools" value="0" note="examples are not deployed" />
+            <Stat label="Pools" value="0" note="examples are not on chain" />
             <Stat label="Built for" value={<span className="text-[16px]">{b.persona}</span>} />
           </div>
 

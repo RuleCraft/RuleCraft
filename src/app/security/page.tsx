@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { BRAND, CHAIN, TOKEN } from "@/config/brand";
+import { BRAND, CHAIN, TOKEN, explorerAddress } from "@/config/brand";
 import { Badge, PageHead } from "@/components/ui/Page";
 import { Prose, Updated } from "@/components/info/Prose";
 import { CaStrip } from "@/components/CopyCa";
+import { DEPLOYMENT, IS_DEPLOYED } from "@/config/deployment";
 
 export const metadata: Metadata = {
   title: "Security",
@@ -61,7 +62,25 @@ export default function SecurityPage() {
         </p>
         <h2>Contracts</h2>
         <p>
-          No Rule Craft contract is deployed. Before launch, the contracts will be published with source on {CHAIN.explorerName}. No independent audit has been completed; when one is, the report will be linked here with its scope and date. Until then, treat every module as unreviewed.
+          {IS_DEPLOYED ? (
+            <>
+              The Rule Craft contracts are live on {CHAIN.name}: hook{" "}
+              <a href={explorerAddress(DEPLOYMENT.hook)} className="break-all">
+                {DEPLOYMENT.hook}
+              </a>
+              , launcher{" "}
+              <a href={explorerAddress(DEPLOYMENT.launcher)} className="break-all">
+                {DEPLOYMENT.launcher}
+              </a>
+              , blueprint registry{" "}
+              <a href={explorerAddress(DEPLOYMENT.registry)} className="break-all">
+                {DEPLOYMENT.registry}
+              </a>
+              . Only these addresses are ours. Their source is in the repository under contracts/. No independent audit has been completed; when one is, the report will be linked here with its scope and date. Until then, treat every module as unreviewed and keep amounts small.
+            </>
+          ) : (
+            "No Rule Craft contract is deployed yet. No independent audit has been completed; treat every module as unreviewed."
+          )}
         </p>
         <h2>Reporting a problem</h2>
         <p>

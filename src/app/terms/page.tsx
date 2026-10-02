@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { BRAND } from "@/config/brand";
 import { PageHead } from "@/components/ui/Page";
 import { Prose, Updated } from "@/components/info/Prose";
+import { IS_DEPLOYED } from "@/config/deployment";
 
 export const metadata: Metadata = { title: "Terms", description: `The terms for using ${BRAND.name}.` };
 
@@ -28,7 +29,7 @@ export default function TermsPage() {
         </ul>
         <h2>Risks</h2>
         <p>
-          Smart contracts can have bugs. Tokens can lose all value. Hooks can change what a trade pays or receives. Blockchains can halt or reorganise. Contracts are not deployed yet and no independent audit has been completed.
+          Smart contracts can have bugs. Tokens can lose all value. Hooks can change what a trade pays or receives. Blockchains can halt or reorganise. {IS_DEPLOYED ? "The Rule Craft contracts are live on mainnet and no independent audit has been completed." : "Contracts are not deployed yet and no independent audit has been completed."}
         </p>
         <h2>The {BRAND.symbol} token</h2>
         <p>

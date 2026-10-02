@@ -1,6 +1,7 @@
 import { CHAIN } from "@/config/brand";
 import { BASE_FEES, FEE_MODEL, MODULE_BY_SLUG } from "@/config/modules";
 import { type DocPage, code, h2, note, ol, p, ul } from "./types";
+import { IS_DEPLOYED } from "@/config/deployment";
 
 const guard = MODULE_BY_SLUG["snipe-guard"];
 const def = (m: typeof guard, k: string) => m.params.find((x) => x.key === k)?.def;
@@ -27,7 +28,7 @@ export const GUIDES: DocPage[] = [
         "Puts the whole supply in one token-only range below the opening price. Buys move the price into it.",
         "Runs the optional dev buy in the same transaction, paying the same rules as everyone else. Rounding dust is burned.",
       ),
-      note("Until the owner deploys the contracts, the launch button says \"Not deployed yet\". The contracts are unaudited.", "warn"),
+      note(IS_DEPLOYED ? "The launch button sends a real mainnet transaction. The contracts are unaudited: start small." : "Until the owner deploys the contracts, the launch button says \"Not deployed yet\". The contracts are unaudited.", "warn"),
       h2("Common conflicts"),
       p(`Snipe Guard caps what buyers together may receive per block as a share of supply (default ${def(guard, "maxBuyPct")}%). A dev buy larger than that cap reverts with GuardCapExceeded; the form checks this before you sign.`),
     ],
@@ -118,7 +119,7 @@ withdrawLiquidity(uint256 launchId)    // after the lock, or any time without on
         "The protocol share accrues to the treasury fixed in the registry; anyone can push it there with the same claim call.",
         "Milestone Pot wins are planned and not part of v1.",
       ),
-      note("Nothing can be claimed until the contracts are deployed."),
+      note(IS_DEPLOYED ? "Royalties accrue in the token of each pool that uses your blueprint; claim them per token from the portfolio." : "Nothing can be claimed until the contracts are deployed."),
     ],
   },
   {

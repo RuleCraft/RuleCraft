@@ -14,6 +14,7 @@ import { PermissionGrid } from "@/components/rules/Readout";
 import { LiveStrip } from "@/components/home/LiveStrip";
 import { ScanForm } from "@/components/pools/ScanForm";
 import { ArrowRight } from "@/components/icons";
+import { DEPLOYED_ON, IS_DEPLOYED } from "@/config/deployment";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +31,7 @@ const PERSONAS = [
 const FAQ = [
   ["What is a Uniswap v4 hook?", "A contract a v4 pool calls at fixed points: when it opens, when liquidity moves, before and after swaps. The hook's address encodes which of 14 callbacks it may run, so its powers are readable from the address alone."],
   ["What does Rule Craft add on top?", "A library of bounded rule modules behind one hook, a composer that shows exactly what a combination does, a registry of blueprints whose authors earn royalties, and a launcher that opens a new token directly into its ruled pool."],
-  ["Is anything live today?", `The composer, the scanner, the live pool index and all docs are live and read ${CHAIN.name} directly. The Rule Craft contracts (hook, launcher, blueprint registry) are written and tested but not deployed yet, and they are unaudited; until the owner deploys them, every button that would sign says "Not deployed yet". The ${BRAND.symbol} token address is published at launch.`],
+  ["Is anything live today?", `The composer, the scanner, the live pool index and all docs are live and read ${CHAIN.name} directly. ${IS_DEPLOYED ? `The Rule Craft contracts (hook, launcher, blueprint registry) are live on ${CHAIN.name} since ${DEPLOYED_ON}: you can launch tokens, publish blueprints, trade Rule Craft pools and claim royalties. They are unaudited, so size accordingly.` : `The Rule Craft contracts (hook, launcher, blueprint registry) are not deployed yet; every button that would sign says so.`} The ${BRAND.symbol} token address is published at launch; it is a separate contract.`],
   ["Who earns what?", `LPs keep the LP fee in full. Burns go to the dead address. From the guard tax and LP stream (add-on revenue) only, a blueprint author takes the royalty they set (up to ${FEE_MODEL.royaltyMaxPct}%) and the protocol takes ${FEE_MODEL.protocolSharePct}% by default, a rate fixed once when the registry is deployed; the rest goes to in-range LPs. A pool with no add-ons pays the protocol nothing.`],
   ["Can rules change after launch?", "No. Module settings, royalty and protocol share are frozen when the pool is created. The hook keeps no switch to turn a rule back on or raise a number."],
   ["Is the risk grade an audit?", "No. It scores permissions and settings: how far the rules can move a trade or an LP from a plain pool. It never inspects code quality. See the methodology page for every factor."],
@@ -209,7 +210,7 @@ export default function Home() {
           <SectionTitle
             eyebrow={`Live · ${CHAIN.name}`}
             title="Hooks are already shaping pools here"
-            lead="Counted from Uniswap v4 PoolManager events over roughly the last eight hours. Third-party pools, read as they are; Rule Craft pools join them at launch."
+            lead="Counted from Uniswap v4 PoolManager events over roughly the last eight hours. Third-party pools are read as they are; Rule Craft pools are listed first on the Pools page."
             right={
               <Link href="/app" className="btn btn-line">
                 Browse live pools
@@ -278,7 +279,7 @@ export default function Home() {
                 ));
               })()}
             </div>
-            <p className="mt-5 text-[12.5px] text-ink-3">Plus 1% of the tokens bought is burned. Percentages of the 1 ETH input. Design numbers, not deployed.</p>
+            <p className="mt-5 text-[12.5px] text-ink-3">Plus 1% of the tokens bought is burned. Percentages of the 1 ETH input, using the Slow Burn example settings and a 10% protocol share.</p>
           </div>
         </div>
       </section>
@@ -289,7 +290,7 @@ export default function Home() {
           <SectionTitle
             eyebrow="Blueprints"
             title="Start from an example"
-            lead="Six rule sets written by the team to show the format. Not deployed; remix any of them."
+            lead="Six example rule sets written by the team to show the format. Remix one, then publish your own on chain."
             right={
               <Link href="/rules" className="btn btn-line">
                 All blueprints

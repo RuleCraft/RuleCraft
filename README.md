@@ -3,7 +3,7 @@
 **Craft your rules. Earn forever.**
 Modular infrastructure for Uniswap v4 hooks, on Robinhood Chain.
 
-Website: https://rulecraft.fun · X: https://x.com/rulecraft
+Website: https://rulecraft.fun · X: https://x.com/rulecraftfun
 
 ## The problem
 
@@ -36,7 +36,7 @@ Rule modules on chain in v1: Snipe Guard, Size-Scaled Fee, Buy Burn, LP Stream, 
 - **Hook scanner** (`/scan`, `/scan/<address>`): paste any hook address or pool id.
 - **Wallet connect**, live ETH and USDG balances, docs, explainers, JSON endpoints (`/api/chain`, `/api/pools`, `/api/token`, `/llms.txt`).
 
-**Live as soon as the contracts are deployed** (until then the site says "Not deployed yet")
+**Live on Robinhood Chain since 2 October 2026** (unaudited contracts: start small)
 
 - **Launch** (`/launch`): one transaction mints a fixed-supply token, opens its Uniswap v4 pool with your rules frozen, and seeds the whole supply as liquidity. Optional dev buy under the same rules.
 - **Publish blueprints** from the composer; launches that use one pay its author a royalty.
@@ -105,11 +105,15 @@ The address is set in one place, `src/config/brand.ts`. Until it is published, e
 
 ## Contracts
 
-| Contract | Role |
-|---|---|
-| `RuleCraftHook` | The single Uniswap v4 hook (permission mask `0x20C4`). Applies each pool's frozen rules: size-scaled LP fee, snipe guard cap and tax, buy burn, LP stream. Pays royalties and protocol share to whoever is owed. |
-| `RuleCraftLauncher` | Launches a token into its pool, holds the founding liquidity (optionally time-locked) for its creator, routes exact-input swaps. |
-| `BlueprintRegistry` | Published rule sets with author and royalty. Treasury and protocol share are fixed at deployment. |
+Deployed on Robinhood Chain (chain id 4663) on 2 October 2026. **Unaudited.** No owner, no upgrade path.
+
+| Contract | Address | Role |
+|---|---|---|
+| `RuleCraftHook` | [`0x98E67cD59f8F885E68C06D48e432CC9a77d960c4`](https://robinhoodchain.blockscout.com/address/0x98E67cD59f8F885E68C06D48e432CC9a77d960c4) | The single Uniswap v4 hook (permission mask `0x20C4`). Applies each pool's frozen rules: size-scaled LP fee, snipe guard cap and tax, buy burn, LP stream. Pays royalties and protocol share to whoever is owed. |
+| `RuleCraftLauncher` | [`0x0197B4018E04642e35372A55018838382b0b6aed`](https://robinhoodchain.blockscout.com/address/0x0197B4018E04642e35372A55018838382b0b6aed) | Launches a token into its pool, holds the founding liquidity (optionally time-locked) for its creator, routes exact-input swaps. |
+| `BlueprintRegistry` | [`0xb48F36Da51717698844AFe187173373ee3A994FA`](https://robinhoodchain.blockscout.com/address/0xb48F36Da51717698844AFe187173373ee3A994FA) | Published rule sets with author and royalty. Protocol share fixed at 10% of add-on revenue; treasury fixed at deployment. |
+
+The addresses live in one file, `src/config/deployment.ts`. The `$RULECRAFT` token is a separate contract and is still published at launch.
 
 Build and test them (needs [Foundry](https://getfoundry.sh) and git):
 
@@ -125,7 +129,7 @@ After changing a contract, run `node scripts/export-artifacts.mjs` from the proj
 
 ## How to deploy the contracts
 
-Deploying is done from the site, with your own wallet. No private key ever touches the code.
+The official deployment is listed above. To run your own copy of the system (for example on a test fork), deploy from the site with your own wallet. No private key ever touches the code.
 
 1. Run the site (below) or open the deployed site, go to `/deploy` and connect the wallet that should deploy.
 2. Step 1 deploys `BlueprintRegistry` with the treasury address and protocol share (basis points, max 3000).

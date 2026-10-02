@@ -4,6 +4,7 @@ import { CHAIN, UNISWAP_V4 } from "@/config/brand";
 import { FEE_MODEL } from "@/config/modules";
 import { Badge, PageHead } from "@/components/ui/Page";
 import { Prose, Updated } from "@/components/info/Prose";
+import { IS_DEPLOYED } from "@/config/deployment";
 
 export const metadata: Metadata = {
   title: "Methodology",
@@ -14,7 +15,9 @@ const KINDS = [
   { tone: "pass" as const, label: "Live", body: "Read from the chain at request time: blocks, gas, balances, v4 pools, hook bytecode." },
   { tone: "blue" as const, label: "Contract rules", body: "Bounds and shares enforced by the Rule Craft contracts (unaudited): module bounds, royalty cap, protocol share. Gas figures are estimates." },
   { tone: "ink" as const, label: "Example", body: "Blueprints the team wrote to illustrate rule sets. No pools, no authors on chain." },
-  { tone: "warn" as const, label: "Not deployed yet", body: "Anything that needs the Rule Craft contracts before the owner deploys them: launches, swaps on Rule Craft pools, royalties, the token supply." },
+  IS_DEPLOYED
+    ? { tone: "warn" as const, label: "Published at launch", body: `The ${"$"}RULECRAFT token: its supply and market figures show a dash until its contract is published. The Rule Craft protocol contracts are already live (unaudited).` }
+    : { tone: "warn" as const, label: "Not deployed yet", body: "Anything that needs the Rule Craft contracts before the owner deploys them: launches, swaps on Rule Craft pools, royalties, the token supply." },
 ];
 
 const FACTORS = [
@@ -84,7 +87,7 @@ export default function MethodologyPage() {
         <ul>
           <li>A failed chain read shows &ldquo;Read failed&rdquo; or &ldquo;--&rdquo;, never zero dressed as data.</li>
           <li>APIs return HTTP 503 rather than an empty list when the chain cannot be reached.</li>
-          <li>Buttons that would write to contracts that are not deployed are disabled and say &ldquo;Not deployed yet&rdquo;.</li>
+          <li>Contract reads go straight to the Rule Craft contracts on chain; buttons that would write to a contract that is not deployed are disabled and say so.</li>
         </ul>
         <p>
           Questions about a number? Read the <Link href="/docs">docs</Link> or ask on X.

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BRAND, CHAIN, CONTRACTS, TOKEN, explorerToken } from "@/config/brand";
+import { BRAND, CHAIN, CONTRACTS, TOKEN, explorerAddress, explorerToken } from "@/config/brand";
 import { FEE_MODEL } from "@/config/modules";
 import { CaStrip } from "@/components/CopyCa";
 import { Badge, PageHead, SectionTitle, Stat } from "@/components/ui/Page";
+import { DEPLOYED_ON, IS_DEPLOYED } from "@/config/deployment";
 
 export const metadata: Metadata = {
   title: `${BRAND.symbol} token`,
@@ -58,10 +59,10 @@ export default function TokenPage() {
 
       <section className="wrap py-12">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6">
-          <Stat label="Total supply" value="--" note="Opens at launch" />
+          <Stat label="Total supply" value="--" note="Token published at launch" />
           <Stat label="Market" value="--" note="No pool yet" />
-          <Stat label="Burned" value="0" note="Opens at launch" />
-          <Stat label="Staked" value="0" note="Opens at launch" />
+          <Stat label="Burned" value="--" note="Token published at launch" />
+          <Stat label="Staked" value="--" note="Planned" />
         </div>
         <p className="mt-6 max-w-[720px] text-[14px] text-ink-3">
           These figures will be read from the chain once the token exists. Until then they stay empty on purpose: this site does not show numbers it cannot prove.
@@ -73,7 +74,7 @@ export default function TokenPage() {
           <SectionTitle
             eyebrow="Value flow"
             title="Where the token's revenue comes from"
-            lead="This is what the Rule Craft contracts do. They are written and tested, not deployed yet, and unaudited. The default protocol share is confirmed by the owner when the registry is deployed."
+            lead={IS_DEPLOYED ? `This is what the Rule Craft contracts on ${CHAIN.name} do today. They are unaudited. The protocol share was fixed at ${FEE_MODEL.protocolSharePct}% when the registry was deployed and can never change.` : "This is what the Rule Craft contracts do once deployed. They are unaudited."}
             right={<Badge tone="warn">Unaudited</Badge>}
           />
           <ol className="grid-cols-1 mt-10 grid gap-4 md:grid-cols-3">
@@ -96,7 +97,7 @@ export default function TokenPage() {
       </section>
 
       <section className="wrap py-14">
-        <SectionTitle eyebrow="Contracts" title="What gets deployed" lead="Rule Craft contracts appear here once the owner deploys them from /deploy. They are unaudited, have no owner and cannot be upgraded." />
+        <SectionTitle eyebrow="Contracts" title="What gets deployed" lead={IS_DEPLOYED ? `Live on ${CHAIN.name} since ${DEPLOYED_ON}. Unaudited, no owner, no upgrade path. The ${BRAND.symbol} token itself is a separate contract, published at launch.` : "Rule Craft contracts appear here once deployed. They are unaudited, have no owner and cannot be upgraded."} />
         <div className="mt-8 overflow-x-auto border border-line bg-card">
           <table className="w-full min-w-[560px] text-left text-[14px]">
             <thead>
@@ -116,7 +117,15 @@ export default function TokenPage() {
                 <tr key={c.name} className="border-b border-line last:border-0">
                   <td className="px-4 py-3 font-medium">{c.name}</td>
                   <td className="px-4 py-3 text-ink-2">{c.role}</td>
-                  <td className="num px-4 py-3 text-ink-3 break-all">{c.address || "Not deployed yet"}</td>
+                  <td className="num px-4 py-3 text-ink-3 break-all">
+                    {c.address ? (
+                      <a href={explorerAddress(c.address)} target="_blank" rel="noreferrer" className="text-blue hover:underline">
+                        {c.address}
+                      </a>
+                    ) : (
+                      "Not deployed yet"
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>

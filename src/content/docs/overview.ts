@@ -1,6 +1,7 @@
 import { BRAND, CHAIN } from "@/config/brand";
 import { MODULES } from "@/config/modules";
 import { type DocPage, h2, note, p, table, ul } from "./types";
+import { DEPLOYED_ON, IS_DEPLOYED } from "@/config/deployment";
 
 const core = MODULES.filter((m) => m.status === "core");
 
@@ -14,7 +15,7 @@ export const OVERVIEW: DocPage[] = [
       p(
         `${BRAND.name} is a marketplace and settlement layer for Uniswap v4 hooks on ${CHAIN.name} (chain id ${CHAIN.id}). Instead of every launcher writing and shipping a one-off hook, pools are composed from reusable rule modules. A composed rule set can be published as a blueprint, and its author earns a royalty every time another pool opens with it.`,
       ),
-      note("The composer, scanner and pool reader work today. The Rule Craft contracts are written and tested but not deployed yet, and they are unaudited; their addresses appear on the contracts page once deployed."),
+      note(IS_DEPLOYED ? `The Rule Craft contracts are live on Robinhood Chain since ${DEPLOYED_ON}; their addresses are on the [contracts page](/docs/reference/contracts). They are unaudited.` : "The composer, scanner and pool reader work today. The Rule Craft contracts are not deployed yet, and they are unaudited; their addresses appear on the contracts page once deployed."),
       h2("The short version"),
       ul(
         "A pool is a normal Uniswap v4 pool whose `hooks` address points at RuleCraftHook.",
@@ -47,9 +48,9 @@ export const OVERVIEW: DocPage[] = [
     slug: "overview/what-you-can-do",
     title: "What you can do",
     section: "Overview",
-    summary: "Every action on Rule Craft today and at launch, with the route that does it.",
+    summary: "Every action on Rule Craft, with the route that does it and its status.",
     body: [
-      p("Some actions are live now because they only read the chain or run in your browser. Others need the Rule Craft contracts and work once the owner deploys them."),
+      p(IS_DEPLOYED ? "Reading actions run in your browser or against the chain; writing actions are transactions you sign against the Rule Craft contracts (unaudited)." : "Some actions are live now because they only read the chain or run in your browser. Others need the Rule Craft contracts and work once the owner deploys them."),
       table(
         ["Action", "Where", "Status"],
         [
@@ -57,19 +58,19 @@ export const OVERVIEW: DocPage[] = [
           ["Browse modules and example blueprints", "[/rules](/rules)", "Live"],
           ["Read recent Uniswap v4 pools on Robinhood Chain", "[/app](/app)", "Live, read from the PoolManager"],
           ["Decode any hook address and get a risk read", "[/scan](/scan)", "Live"],
-          ["Draft and launch a token", "[/launch](/launch)", "Draft live; launch live once deployed"],
-          ["Trade on a Rule Craft pool", "[/app](/app)", "Live once deployed"],
+          ["Draft and launch a token", "[/launch](/launch)", IS_DEPLOYED ? "Live" : "Draft live; launch live once deployed"],
+          ["Trade on a Rule Craft pool", "[/app](/app)", IS_DEPLOYED ? "Live" : "Live once deployed"],
           ["Draft rules for a token that already trades", "[/existing](/existing)", "Draft only; planned (v1 launches new tokens only)"],
-          ["Publish a blueprint and earn royalties", "[/builder](/builder)", "Live once deployed"],
-          ["Claim royalties, collect LP fees", "[/portfolio](/portfolio)", "Live once deployed"],
-          ["Deploy the contracts (owner)", "[/deploy](/deploy)", "Not deployed yet"],
+          ["Publish a blueprint and earn royalties", "[/builder](/builder)", IS_DEPLOYED ? "Live" : "Live once deployed"],
+          ["Claim royalties, collect LP fees", "[/portfolio](/portfolio)", IS_DEPLOYED ? "Live" : "Live once deployed"],
+          ["Deploy the contracts (owner)", "[/deploy](/deploy)", IS_DEPLOYED ? `Done ${DEPLOYED_ON}` : "Not deployed yet"],
         ],
       ),
       h2("What never happens"),
       ul(
         "The site never holds your keys. Every transaction is signed in your own wallet.",
         "Connecting a wallet only shares your address. It is not an approval.",
-        "No number on the site is invented. Where a figure depends on contracts that are not deployed, it shows 0, a dash or \"Not deployed yet\".",
+        "No number on the site is invented. Contract figures are read from the contracts; where a figure has no source yet (such as the token supply before the token is published), it shows a dash.",
       ),
     ],
   },

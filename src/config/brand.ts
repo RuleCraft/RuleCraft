@@ -20,8 +20,8 @@ export const BRAND = {
   tagline: "Modular infrastructure for Uniswap v4 hooks.",
   description:
     "Rule Craft is a marketplace for Uniswap v4 hooks on Robinhood Chain. Compose pool rules from reusable modules, publish them as royalty-bearing blueprints, and let every trader read the rules before the first swap.",
-  x: "https://x.com/rulecraft",
-  xHandle: "@rulecraft",
+  x: "https://x.com/rulecraftfun",
+  xHandle: "@rulecraftfun",
   /** Public GitHub repository. Empty hides every GitHub link on the site. */
   github: "https://github.com/" as string,
   ca: CA,
@@ -80,7 +80,7 @@ export const TOKEN = {
 
 /**
  * Rule Craft contracts (unaudited). Addresses come from src/config/deployment.ts, the single
- * place they are set; empty means not deployed yet and the site says so.
+ * place they are set (live on mainnet since 2 Oct 2026); empty would mean not deployed and the site says so.
  */
 export const CONTRACTS: { name: string; role: string; address: string }[] = [
   { name: "RuleCraftHook", role: "The one v4 hook every Rule Craft pool points at. Applies each pool's frozen rules; pays royalties and protocol share to whoever is owed.", address: DEPLOYMENT.hook },

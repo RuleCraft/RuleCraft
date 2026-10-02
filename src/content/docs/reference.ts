@@ -1,7 +1,8 @@
-import { CHAIN, CONTRACTS, UNISWAP_V4 } from "@/config/brand";
+import { CHAIN, CONTRACTS, UNISWAP_V4, explorerAddress } from "@/config/brand";
 import { MODULES } from "@/config/modules";
 import { FLAGS } from "@/lib/hooks";
 import { type DocPage, code, h2, note, p, table } from "./types";
+import { DEPLOYED_ON, IS_DEPLOYED } from "@/config/deployment";
 
 export const REFERENCE: DocPage[] = [
   {
@@ -24,9 +25,10 @@ export const REFERENCE: DocPage[] = [
         ],
       ),
       h2("Rule Craft"),
+      p(IS_DEPLOYED ? `Deployed on ${CHAIN.name} on ${DEPLOYED_ON} by the project owner from the /deploy console.` : "Not deployed yet."),
       table(
         ["Contract", "Role", "Address"],
-        CONTRACTS.map((c) => [c.name, c.role, c.address || "Not deployed yet"]),
+        CONTRACTS.map((c) => [c.name, c.role, c.address ? `[${c.address}](${explorerAddress(c.address)})` : "Not deployed yet"]),
       ),
       note("The Rule Craft contracts are unaudited. They have no owner and no upgrade path; the launcher's single admin call (setting the hook) can be made once, by its deployer.", "warn"),
       p("The hook is deployed through the deterministic CREATE2 deployer `0x4e59b44847b379578588920cA78FbF26c0B4956C` with a salt mined so its address ends in the permission mask 0x20C4. Sources and tests live in the repository under `contracts/` (Foundry: `contracts/setup.sh`, then `forge build` and `forge test`)."),

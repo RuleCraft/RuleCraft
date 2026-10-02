@@ -2,6 +2,7 @@ import { CHAIN, UNISWAP_V4 } from "@/config/brand";
 import { FEE_MODEL, MODULES } from "@/config/modules";
 import { FLAGS } from "@/lib/hooks";
 import { type DocPage, code, h2, note, p, table, ul } from "./types";
+import { DEPLOYED_ON, IS_DEPLOYED } from "@/config/deployment";
 
 const delta = FLAGS.filter((f) => f.group === "delta").map((f) => `\`${f.key}\``);
 
@@ -24,7 +25,7 @@ export const CONCEPTS: DocPage[] = [
           ["BlueprintRegistry", "Stores published blueprints (rules, author, royalty). Fixes the treasury and the protocol share when it is deployed."],
         ],
       ),
-      note("The contracts are written and tested but not deployed yet, and they are unaudited. Their addresses appear on the [contracts page](/docs/reference/contracts) once the owner deploys them."),
+      note(IS_DEPLOYED ? `The contracts are live on Robinhood Chain since ${DEPLOYED_ON} and unaudited. Their addresses are on the [contracts page](/docs/reference/contracts).` : "The contracts are not deployed yet, and they are unaudited. Their addresses appear on the [contracts page](/docs/reference/contracts) once the owner deploys them."),
       h2("Why one hook"),
       p("A v4 hook's permissions are fixed by its address. RuleCraftHook is mined to an address ending in 0x20C4: beforeInitialize, beforeSwap, afterSwap and afterSwapReturnDelta. Every Rule Craft pool points at it, so every pool shows the same four bits; what differs is the frozen rule set stored for each pool, which decides what those callbacks do."),
       h2("Flow of a swap"),

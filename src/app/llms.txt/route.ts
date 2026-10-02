@@ -1,5 +1,6 @@
 import { BRAND, CHAIN, CONTRACTS, TOKEN, UNISWAP_V4 } from "@/config/brand";
 import { MODULES } from "@/config/modules";
+import { DEPLOYED_ON, IS_DEPLOYED } from "@/config/deployment";
 
 export const dynamic = "force-static";
 
@@ -16,10 +17,10 @@ ${BRAND.symbol} contract: ${ca}
 Official site: ${BRAND.url} · X: ${BRAND.x}
 
 ## Status
-- Live: composer, rule pages, example blueprints, v4 pool list, hook scanner, launch form validation, wallet connect, chain reads.
-- Contracts (unaudited, no owner, no upgrades): ${CONTRACTS.map((c) => `${c.name} ${c.address || "(not deployed yet)"}`).join("; ")}.
+- Live: composer, rule pages, example blueprints, v4 pool list, hook scanner, wallet connect, chain reads${IS_DEPLOYED ? ", token launches, blueprint publishing, swaps on Rule Craft pools, royalty claims" : ""}.
+- Contracts (${IS_DEPLOYED ? `live on ${CHAIN.name} since ${DEPLOYED_ON}, ` : ""}unaudited, no owner, no upgrades): ${CONTRACTS.map((c) => `${c.name} ${c.address || "(not deployed yet)"}`).join("; ")}.
 - Swaps on Rule Craft pools: RuleCraftLauncher.swapExactIn (exact input only); quotes from the Uniswap v4 Quoter ${UNISWAP_V4.quoter}.
-- Contract-backed figures read 0 or "--" until the contracts are deployed.
+- ${IS_DEPLOYED ? `Contract-backed figures are read from the contracts above. The ${BRAND.symbol} token is a separate contract, published at launch.` : `Contract-backed figures read 0 or "--" until the contracts are deployed.`}
 - Example blueprints are written by the team to illustrate rule sets; they have no pools and no royalties.
 
 ## Rule modules
@@ -30,7 +31,7 @@ ${MODULES.map((m) => `- ${m.name} (${m.status}): ${m.line} Callbacks: ${m.callba
 - ${BRAND.url}/rules: modules and example blueprints
 - ${BRAND.url}/app: recent Uniswap v4 pools on ${CHAIN.name}
 - ${BRAND.url}/scan: decode any hook address
-- ${BRAND.url}/launch: launch form (one launch transaction once deployed)
+- ${BRAND.url}/launch: launch form (${IS_DEPLOYED ? "one launch transaction" : "one launch transaction once deployed"})
 - ${BRAND.url}/pool/<poolId>: a pool's rules read from the hook, plus a swap box for Rule Craft pools
 - ${BRAND.url}/existing: rules for a token that already trades (draft only; planned, v1 launches new tokens only)
 - ${BRAND.url}/docs: concepts, guides, reference

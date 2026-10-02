@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Badge, PageHead } from "@/components/ui/Page";
 import { ChainStatus } from "@/components/info/ChainStatus";
 import { BRAND } from "@/config/brand";
+import { DEPLOYMENT, DEPLOYED_ON, IS_DEPLOYED } from "@/config/deployment";
 
 export const metadata: Metadata = {
   title: "Status",
@@ -16,10 +17,14 @@ const ROWS: Row[] = [
   { item: "Hook scanner", state: "live", note: "Decodes any address and lists recent pools that use it." },
   { item: "v4 pool list", state: "live", note: "Read from PoolManager Initialize events, refreshed every two minutes." },
   { item: "Wallet connect", state: "live", note: "EIP-6963 wallets and optional WalletConnect; adds Robinhood Chain on connect." },
-  { item: "Rule Craft contracts", state: "launch", note: "RuleCraftHook, RuleCraftLauncher and BlueprintRegistry are written and tested (unit, fuzz, mainnet fork). Unaudited. Not deployed yet; the owner deploys them from /deploy." },
-  { item: "Launch, publish, trade, claim", state: "launch", note: "Wired to the contracts. The buttons say \"Not deployed yet\" until the addresses are set." },
+  IS_DEPLOYED
+    ? { item: "Rule Craft contracts", state: "live", note: `RuleCraftHook, RuleCraftLauncher and BlueprintRegistry live on Robinhood Chain since ${DEPLOYED_ON} (registry block ${DEPLOYMENT.deployBlock.toLocaleString("en-US")}). Tested (unit, fuzz, mainnet fork) but unaudited.` }
+    : { item: "Rule Craft contracts", state: "launch", note: "RuleCraftHook, RuleCraftLauncher and BlueprintRegistry are tested but not deployed yet. Unaudited." },
+  IS_DEPLOYED
+    ? { item: "Launch, publish, trade, claim", state: "live", note: "Real transactions against the mainnet contracts, signed in your own wallet. Unaudited: size accordingly." }
+    : { item: "Launch, publish, trade, claim", state: "launch", note: "Wired to the contracts. The buttons say \"Not deployed yet\" until the addresses are set." },
   { item: `${BRAND.symbol} contract`, state: "launch", note: "Not published. Any token using the name is not ours." },
-  { item: "Fee model", state: "design", note: "Protocol share (default 10%) and treasury are fixed when the owner deploys the registry." },
+  { item: "Fee model", state: "design", note: IS_DEPLOYED ? "Protocol share 10% of add-on revenue and the treasury address were fixed when the registry was deployed; they can never change." : "Protocol share (default 10%) and treasury are fixed when the owner deploys the registry." },
 ];
 
 const TONE = { live: "pass", design: "blue", launch: "warn" } as const;

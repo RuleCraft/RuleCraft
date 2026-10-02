@@ -6,6 +6,8 @@ import { batch } from "@/lib/chain-server";
 import { formatEth } from "@/lib/rpc";
 import { Badge, PageHead, Stat } from "@/components/ui/Page";
 import { ArrowUpRight } from "@/components/icons";
+import { IS_DEPLOYED } from "@/config/deployment";
+import { readCrafterStats } from "@/lib/rulecraft-server";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +33,7 @@ async function read(address: string) {
 export default async function CrafterPage({ params }: Props) {
   const { address } = await params;
   if (!isAddress(address)) notFound();
-  const chain = await read(address);
+  const [chain, stats] = await Promise.all([read(address), readCrafterStats(address)]);
   const kind = chain.isContract === null ? "Unknown" : chain.isContract ? "Contract" : "Wallet (EOA)";
 
   return (
@@ -49,14 +51,14 @@ export default async function CrafterPage({ params }: Props) {
       <section className="wrap py-12">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6">
           <Stat label={`${CHAIN.nativeSymbol} balance`} value={chain.balance ?? "--"} note={chain.ok ? "Live" : "Unavailable"} />
-          <Stat label="Launches" value="--" note="Not deployed yet" />
-          <Stat label="Blueprints" value="--" note="Not deployed yet" />
+          <Stat label="Launches" value={stats.launches ?? "--"} note={IS_DEPLOYED ? (stats.ok ? `of ${stats.totalLaunches} on Rule Craft` : "Read failed") : "Not deployed yet"} />
+          <Stat label="Blueprints" value={stats.blueprints ?? "--"} note={IS_DEPLOYED ? (stats.ok ? `of ${stats.totalBlueprints} published` : "Read failed") : "Not deployed yet"} />
           <Stat label="Royalties" value="--" note="See portfolio" />
         </div>
         <div className="mt-10 border border-dashed border-line-2 bg-card p-8">
-          <p className="font-display text-[22px]">No published rules yet</p>
+          <p className="font-display text-[22px]">{stats.launches || stats.blueprints ? "Read from the Rule Craft contracts" : "No published rules yet"}</p>
           <p className="mt-2 max-w-[560px] text-[14.5px] text-ink-2">
-            Public crafter profiles are planned. The Rule Craft contracts are written but not deployed yet; once they are, a connected wallet sees its own launches and royalties on the portfolio page, read straight from the chain.
+            Public crafter profiles are planned. The counts above come straight from the launcher and the blueprint registry on {CHAIN.name}; a connected wallet manages its own launches and claims royalties on the portfolio page. The contracts are unaudited.
           </p>
           <Link href="/builder" className="btn btn-sm btn-line mt-5">
             Draft a rule set

@@ -1,4 +1,5 @@
 import { type DocPage, h2, note, p, ul } from "./types";
+import { DEPLOYED_ON, IS_DEPLOYED } from "@/config/deployment";
 
 export const SECURITY: DocPage[] = [
   {
@@ -18,7 +19,7 @@ export const SECURITY: DocPage[] = [
         "If no liquidity is in range at the moment of a buy, the guard tax and stream are simply not charged on that buy.",
         "Milestone Pot and Arb Recapture are planned and not part of the on-chain v1.",
       ),
-      note("The contracts are written and tested but not deployed yet.", "warn"),
+      note(IS_DEPLOYED ? `The contracts are live on Robinhood Chain since ${DEPLOYED_ON}. Tested (unit, fuzz, mainnet fork) but not audited.` : "The contracts are tested but not deployed yet.", "warn"),
     ],
   },
   {

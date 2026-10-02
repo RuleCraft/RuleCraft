@@ -1,18 +1,21 @@
 /*
  * Rule Craft contract addresses on Robinhood Chain mainnet. ONE place to change.
  *
- * Empty until the owner deploys from /deploy with their own wallet. Then paste the
- * four values the /deploy page prints, commit, and redeploy the site. While empty,
- * every on-chain action on the site says "Not deployed yet" and stays disabled.
+ * Set from the values the /deploy page printed. If they are ever emptied, every
+ * on-chain action on the site says "Not deployed yet" and stays disabled, and every
+ * status text that reads IS_DEPLOYED follows.
  *
  * The contracts are unaudited.
  */
+// Deployed by the owner from /deploy on 2 Oct 2026. Treasury 0xF6D090cbDe85b871cd89018269be00c9Ffb903Aa,
+// protocol share 1000 bps (10%), both fixed for good. Verified on chain: code present, hook ends in 0x20C4,
+// launcher.hook and hook.launcher point at each other, both use the v4 PoolManager.
 export const DEPLOYMENT = {
-  registry: "",
-  launcher: "",
-  hook: "",
+  registry: "0xb48F36Da51717698844AFe187173373ee3A994FA",
+  launcher: "0x0197B4018E04642e35372A55018838382b0b6aed",
+  hook: "0x98E67cD59f8F885E68C06D48e432CC9a77d960c4",
   /** Block of the registry deployment, for reference only. */
-  deployBlock: 0,
+  deployBlock: 78242394,
 };
 
 /**
@@ -28,3 +31,11 @@ export const CREATE2_DEPLOYER = "0x4e59b44847b379578588920cA78FbF26c0B4956C";
 
 /** Permission bits the hook address must end in: beforeInitialize | beforeSwap | afterSwap | afterSwapReturnDelta. */
 export const HOOK_FLAGS = 0x20c4;
+
+const isAddr = (v: string) => /^0x[0-9a-fA-F]{40}$/.test(v);
+
+/** True when all three contract addresses are set. Status copy across the site reads this. */
+export const IS_DEPLOYED = isAddr(DEPLOYMENT.registry) && isAddr(DEPLOYMENT.launcher) && isAddr(DEPLOYMENT.hook);
+
+/** Date the owner deployed the contracts (shown in status copy). */
+export const DEPLOYED_ON = "2026-10-02";

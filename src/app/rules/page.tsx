@@ -78,7 +78,7 @@ export default function RulesPage() {
           <SectionTitle
             eyebrow="Blueprints"
             title="Example rule sets"
-            lead="Written by the Rule Craft team to show the format. They are not deployed, have no on-chain author and no pools yet. Published blueprints from crafters appear here once the registry opens."
+            lead="Written by the Rule Craft team to show the format. They are examples, not published on chain: they have no author and earn no royalty. Remix one in the composer and publish it to put it on chain."
           />
           <div className="mt-8 overflow-x-auto">
             <table className="w-full min-w-[760px] border-collapse text-left text-[14px]">

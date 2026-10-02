@@ -1,15 +1,45 @@
 import { type Block, h2, note, p, ul } from "./docs/types";
+import { DEPLOYMENT, IS_DEPLOYED } from "@/config/deployment";
+
+const EXPLORER = "https://robinhoodchain.blockscout.com/address/";
 
 export type UpdateStatus = "Shipped" | "In progress" | "Planned";
 export type Update = { slug: string; title: string; date: string; status: UpdateStatus; summary: string; body: Block[] };
 
+const deployed: Update[] = IS_DEPLOYED
+  ? [
+      {
+        slug: "contracts-live",
+        title: "Contracts live on Robinhood Chain",
+        date: "2026-10-02",
+        status: "Shipped",
+        summary: "The hook, launcher and blueprint registry are deployed on mainnet. Launch, publish, trade and claim are live. Unaudited.",
+        body: [
+          p(`The project owner deployed the three Rule Craft contracts from the /deploy console with their own wallet, starting at block ${DEPLOYMENT.deployBlock.toLocaleString("en-US")}. The site now reads and writes to them.`),
+          h2("Addresses"),
+          ul(
+            `RuleCraftHook: [${DEPLOYMENT.hook}](${EXPLORER}${DEPLOYMENT.hook}) (address ends in the permission bits 0x20C4)`,
+            `RuleCraftLauncher: [${DEPLOYMENT.launcher}](${EXPLORER}${DEPLOYMENT.launcher})`,
+            `BlueprintRegistry: [${DEPLOYMENT.registry}](${EXPLORER}${DEPLOYMENT.registry})`,
+          ),
+          h2("Checked on chain"),
+          ul("Bytecode present at all three addresses.", "The launcher points at the hook and the hook points back at the launcher.", "The hook uses the Uniswap v4 PoolManager.", "Protocol share fixed at 10% of add-on revenue; treasury fixed. Neither can change."),
+          h2("Live now"),
+          ul("Launch a token from /launch.", "Publish a blueprint from the composer.", "Trade Rule Craft pools on their pool page.", "Claim royalties and collect founding-position fees from /portfolio."),
+          note("The contracts are unaudited. Start small. The $RULECRAFT token is a separate contract and is still published at launch.", "warn"),
+        ],
+      },
+    ]
+  : [];
+
 export const UPDATES: Update[] = [
+  ...deployed,
   {
     slug: "introducing-rule-craft",
     title: "Introducing Rule Craft",
     date: "2026-10-02",
     status: "Shipped",
-    summary: "The site, the composer, the scanner and the live pool reader are up. Contracts are not deployed yet.",
+    summary: "The site, the composer, the scanner and the live pool reader went up first; the contracts followed the same day.",
     body: [
       p("Rule Craft is a marketplace for Uniswap v4 hooks on Robinhood Chain. The read side went live first; the contracts followed the same day (see the on-chain v1 update)."),
       h2("Live today"),
@@ -20,17 +50,16 @@ export const UPDATES: Update[] = [
         "Scanner: decode any hook address and get a risk read.",
         "Launch drafts, validated end to end.",
       ),
-      h2("Not yet"),
-      ul("The $RULECRAFT contract address.", "Deployed Rule Craft contracts (written and tested, awaiting the owner's deployment)."),
-      note("Every contract-backed number on the site reads 0, a dash or \"Not deployed yet\" until then."),
+      h2("Still to come"),
+      ul("The $RULECRAFT token contract address (published at launch)."),
     ],
   },
   {
     slug: "on-chain-v1",
     title: "On-chain v1: hook, launcher, blueprint registry",
     date: "2026-10-02",
-    status: "In progress",
-    summary: "Three contracts written and tested; waiting for the owner to deploy them from /deploy. Unaudited.",
+    status: "Shipped",
+    summary: "Three contracts written and tested (unit, fuzz, mainnet fork). Unaudited.",
     body: [
       p("The write side is built. Three contracts sit next to the Uniswap v4 PoolManager on Robinhood Chain:"),
       ul(

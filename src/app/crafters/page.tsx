@@ -4,6 +4,7 @@ import { BRAND } from "@/config/brand";
 import { Badge, PageHead, SectionTitle } from "@/components/ui/Page";
 import { CrafterCard } from "@/components/info/CrafterCard";
 import { AddressJump } from "@/components/info/AddressJump";
+import { IS_DEPLOYED } from "@/config/deployment";
 
 export const metadata: Metadata = {
   title: "Crafters",
@@ -46,10 +47,10 @@ export default function CraftersPage() {
             <p className="num text-[40px] leading-none text-ink">0</p>
             <p className="mt-2 font-display text-[22px]">published profiles</p>
             <p className="mx-auto mt-2 max-w-[420px] text-[14.5px] text-ink-2">
-              Public profiles are planned. Until the contracts are deployed nobody has launches or royalties to show, including us; after that, your own appear on the portfolio page.
+              Public profiles are planned. Launches and blueprints are already on chain: open any wallet below to see its counts, and your own launches and royalties are on the portfolio page.
             </p>
             <div className="mt-4 flex justify-center">
-              <Badge tone="warn">Not deployed yet</Badge>
+              <Badge tone="warn">{IS_DEPLOYED ? "Profiles planned" : "Not deployed yet"}</Badge>
             </div>
           </div>
           <div className="mt-8">

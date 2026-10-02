@@ -226,7 +226,7 @@ export const BASE_FEES = [
 ];
 
 /**
- * Design numbers for the fee model. Not deployed; documented as design in the
+ * Fee model numbers. Protocol share 10% matches the deployed BlueprintRegistry (fixed for good); the rest mirror on-chain bounds, documented in the
  * docs and the token page. Change them here and in the docs together.
  */
 export const FEE_MODEL = {

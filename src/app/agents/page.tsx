@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BRAND, CHAIN } from "@/config/brand";
 import { Badge, PageHead, SectionTitle } from "@/components/ui/Page";
+import { DEPLOYMENT, IS_DEPLOYED } from "@/config/deployment";
 
 export const metadata: Metadata = {
   title: "For agents",
@@ -14,7 +15,14 @@ const ENDPOINTS = [
   { method: "GET", path: "/api/token?address=0x…", live: true, body: "ERC-20 name, symbol, decimals and total supply for any address, plus whether it has code." },
   { method: "POST", path: "/api/rpc", live: true, body: "Read-only JSON-RPC relay: eth_call, eth_getCode, eth_getBalance, eth_getLogs (≤ 20,000 blocks), eth_blockNumber, eth_chainId, eth_getTransactionReceipt, eth_estimateGas, eth_gasPrice. Up to 20 calls per batch." },
   { method: "GET", path: "/llms.txt", live: true, body: "Plain-text summary of the product, routes, endpoints and contract status." },
-  { method: "—", path: "Contracts", live: false, body: "RuleCraftLauncher (launch, swapExactIn), RuleCraftHook (poolRules, owed, claim), BlueprintRegistry (count, get, publish). ABIs are in the repository; addresses appear on /docs/reference/contracts once deployed. Unaudited." },
+  {
+    method: "—",
+    path: "Contracts",
+    live: IS_DEPLOYED,
+    body: IS_DEPLOYED
+      ? `RuleCraftLauncher ${DEPLOYMENT.launcher} (launch, swapExactIn, launchCount, getLaunch), RuleCraftHook ${DEPLOYMENT.hook} (poolRules, owed, claim), BlueprintRegistry ${DEPLOYMENT.registry} (count, get, publish). ABIs are in the repository. Unaudited.`
+      : "RuleCraftLauncher (launch, swapExactIn), RuleCraftHook (poolRules, owed, claim), BlueprintRegistry (count, get, publish). ABIs are in the repository; addresses appear on /docs/reference/contracts once deployed. Unaudited.",
+  },
 ];
 
 const RULES = [
@@ -56,13 +64,13 @@ export default function AgentsPage() {
         <SectionTitle eyebrow="Endpoints" title="What an agent can call" />
         <div className="grid-cols-1 mt-8 grid gap-3">
           {ENDPOINTS.map((e) => (
-            <div key={e.path} className="grid grid-cols-1 gap-3 border border-line bg-card p-5 md:grid-cols-[260px_1fr_auto] md:items-start">
+            <div key={e.path} className="grid grid-cols-1 gap-3 border border-line bg-card p-5 md:grid-cols-[260px_minmax(0,1fr)_auto] md:items-start">
               <p className="num break-all text-[14px]">
                 <span className="mr-2 text-signal">{e.method}</span>
                 {e.path}
               </p>
-              <p className="text-[14.5px] leading-[1.55] text-ink-2">{e.body}</p>
-              <div>{e.live ? <Badge tone="pass">Live</Badge> : <Badge tone="warn">Not deployed yet</Badge>}</div>
+              <p className="min-w-0 text-[14.5px] leading-[1.55] text-ink-2 [overflow-wrap:anywhere]">{e.body}</p>
+              <div>{e.live ? <Badge tone="pass">Live</Badge> : <Badge tone="warn">{IS_DEPLOYED ? "Planned" : "Not deployed yet"}</Badge>}</div>
             </div>
           ))}
         </div>
