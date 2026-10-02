@@ -82,7 +82,7 @@ export function ExistingForm() {
                 ].map(([k, v]) => (
                   <div key={k as string} className="min-w-0 border-l-2 border-ink pl-3">
                     <dt className="label">{k}</dt>
-                    <dd className="num mt-1 truncate text-[15px] text-ink">{v}</dd>
+                    <dd className="num mt-1 text-[15px] leading-snug text-ink [overflow-wrap:anywhere]">{v}</dd>
                   </div>
                 ))}
                 <a href={explorerToken(address.trim())} target="_blank" rel="noreferrer" className="col-span-2 text-[13px] text-blue underline underline-offset-4 sm:col-span-4">

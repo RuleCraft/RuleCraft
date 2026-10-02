@@ -124,7 +124,7 @@ export function LaunchForm({ initial }: { initial?: string | null }) {
                   className={`w-full border-t-[3px] pt-2 text-left disabled:opacity-40 ${i === step ? "border-signal" : done ? "border-ink" : "border-line-2"}`}
                 >
                   <span className="num block text-[11px] text-ink-3">0{i + 1}</span>
-                  <span className={`block truncate text-[13px] sm:text-[14px] ${i === step ? "font-medium text-ink" : "text-ink-2"}`}>{s}</span>
+                  <span className={`block text-[13px] leading-tight sm:text-[14px] ${i === step ? "font-medium text-ink" : "text-ink-2"}`}>{s}</span>
                 </button>
               </li>
             );
@@ -359,7 +359,7 @@ export function LaunchForm({ initial }: { initial?: string | null }) {
           <p className="label">Draft</p>
           <dl className="mt-3 grid grid-cols-[110px_1fr] gap-y-2 text-[13.5px]">
             <dt className="text-ink-3">Token</dt>
-            <dd className="truncate text-ink">{form.details.symbol ? `${form.details.name} · ${form.details.symbol}` : "not named"}</dd>
+            <dd className="min-w-0 break-words text-ink">{form.details.symbol ? `${form.details.name} · ${form.details.symbol}` : "not named"}</dd>
             <dt className="text-ink-3">Rules</dt>
             <dd className="text-ink">{form.rules.name || `${c.modules.length} modules`}</dd>
             <dt className="text-ink-3">Valuation</dt>

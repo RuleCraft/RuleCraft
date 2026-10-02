@@ -47,7 +47,7 @@ export default async function CrafterPage({ params }: Props) {
         </div>
       </PageHead>
       <section className="wrap py-12">
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-5">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6">
           <Stat label={`${CHAIN.nativeSymbol} balance`} value={chain.balance ?? "--"} note={chain.ok ? "Live" : "Unavailable"} />
           <Stat label="Launches" value="0" note="Opens at launch" />
           <Stat label="Blueprints" value="0" note="Opens at launch" />

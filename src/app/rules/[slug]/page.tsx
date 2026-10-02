@@ -53,7 +53,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
 
       <div className="grid-cols-1 wrap grid gap-10 py-12 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="min-w-0">
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-5">
             <Stat label="Callbacks" value={m.callbacks.length} />
             <Stat label="Swap gas" value={m.gas.split(" ")[0]} note="estimate" />
             <Stat label="Touches" value={m.touches.join(" · ")} />

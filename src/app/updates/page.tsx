@@ -18,7 +18,7 @@ export default function UpdatesPage() {
         <ol className="relative border-l-2 border-ink pl-6 sm:pl-8">
           {UPDATES.map((u) => (
             <li key={u.slug} className="relative pb-10 last:pb-0">
-              <span className={`absolute -left-[33px] top-1.5 size-3 border-2 border-ink sm:-left-[41px] ${u.status === "Shipped" ? "bg-signal" : "bg-paper"}`} />
+              <span aria-hidden="true" className={`absolute -left-[33px] top-1.5 size-3 border-2 border-ink sm:-left-[41px] ${u.status === "Shipped" ? "bg-signal" : "bg-paper"}`} />
               <div className="flex flex-wrap items-center gap-3">
                 <Badge tone={statusTone(u.status)}>{u.status}</Badge>
                 <time className="font-mono text-[12px] text-ink-3" dateTime={u.date}>

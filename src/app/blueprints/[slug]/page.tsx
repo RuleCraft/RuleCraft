@@ -50,7 +50,7 @@ export default async function BlueprintPage({ params }: { params: Promise<{ slug
 
       <div className="grid-cols-1 wrap grid gap-10 py-12 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="min-w-0">
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-5">
             <Stat label="Modules" value={c.modules.length} />
             <Stat label="Royalty" value={`${b.royaltyPct}%`} note="of add-on revenue" />
             <Stat label="Pools" value="0" note="opens at launch" />
@@ -75,7 +75,7 @@ export default async function BlueprintPage({ params }: { params: Promise<{ slug
             <PermissionGrid flags={c.callbacks} />
           </div>
 
-          <div className="grid-cols-1 mt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 grid grid-cols-1 gap-6 @2xl:grid-cols-2">
             <div className="card p-5">
               <p className="label mb-3">Where each rule runs</p>
               <LifecycleTrack modules={c.modules} />

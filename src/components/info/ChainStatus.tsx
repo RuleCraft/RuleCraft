@@ -61,7 +61,7 @@ export function ChainStatus({ compact = false }: { compact?: boolean }) {
         {rows.map(([k, v]) => (
           <div key={k} className="min-w-0">
             <dt className="text-[12.5px] text-ink-3">{k}</dt>
-            <dd className="num mt-0.5 truncate text-[15px] text-ink">{v}</dd>
+            <dd className="num mt-0.5 text-[15px] leading-snug text-ink [overflow-wrap:anywhere]">{v}</dd>
           </div>
         ))}
       </dl>

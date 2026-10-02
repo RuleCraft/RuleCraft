@@ -30,7 +30,7 @@ async function Index() {
   const dyn = index.pools.filter((p) => p.dynamic).length;
   return (
     <>
-      <div className="mb-8 grid grid-cols-2 gap-5 md:grid-cols-4">
+      <div className="mb-8 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-5">
         <Stat label="Pools opened" value={index.pools.length} note={`blocks ${index.fromBlock?.toLocaleString("en-US")}–${index.toBlock.toLocaleString("en-US")}`} />
         <Stat label="With a hook" value={hooked.length} note={`${index.pools.length ? Math.round((hooked.length / index.pools.length) * 100) : 0}% of new pools`} />
         <Stat label="Distinct hooks" value={hooks.size} />

@@ -14,6 +14,7 @@ export function SiteHeader() {
   const [menu, setMenu] = useState(false);
   const [more, setMore] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMenu(false);
@@ -23,7 +24,8 @@ export function SiteHeader() {
   useEffect(() => {
     if (!more) return;
     const onDown = (e: PointerEvent) => {
-      if (!moreRef.current?.contains(e.target as Node)) setMore(false);
+      const t = e.target as Node;
+      if (!moreRef.current?.contains(t) && !panelRef.current?.contains(t)) setMore(false);
     };
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMore(false);
     document.addEventListener("pointerdown", onDown);
@@ -70,25 +72,6 @@ export function SiteHeader() {
             >
               More <ChevronDownIcon className={`size-3.5 transition-transform ${more ? "rotate-180" : ""}`} />
             </button>
-            {more ? (
-              <div className="absolute left-0 top-[calc(100%+12px)] z-50 grid w-[720px] animate-pop grid-cols-3 gap-6 border border-ink bg-card p-6 shadow-[6px_6px_0_rgba(25,27,34,0.9)]">
-                {NAV_MORE.map((g) => (
-                  <div key={g.title}>
-                    <p className="label">{g.title}</p>
-                    <ul className="grid-cols-1 mt-3 grid gap-1">
-                      {g.links.map((l) => (
-                        <li key={l.href}>
-                          <Link href={l.href} className="block rounded-[3px] px-2 py-1.5 -mx-2 hover:bg-paper">
-                            <span className="block text-[14.5px] text-ink">{l.label}</span>
-                            {l.note ? <span className="block text-[12.5px] text-ink-3">{l.note}</span> : null}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            ) : null}
           </div>
         </nav>
 
@@ -108,6 +91,28 @@ export function SiteHeader() {
           </button>
         </div>
       </div>
+
+      {more ? (
+        <div ref={panelRef} className="absolute inset-x-0 top-full z-50 hidden animate-pop border-b border-ink bg-card shadow-[0_10px_0_rgba(25,27,34,0.08)] lg:block" data-more-panel>
+          <div className="wrap grid grid-cols-3 gap-8 py-7">
+            {NAV_MORE.map((g) => (
+              <div key={g.title} className="min-w-0">
+                <p className="label">{g.title}</p>
+                <ul className="mt-3 grid grid-cols-1 gap-1">
+                  {g.links.map((l) => (
+                    <li key={l.href}>
+                      <Link href={l.href} className="group block py-1.5">
+                        <span className="block text-[14.5px] text-ink group-hover:text-signal">{l.label}</span>
+                        {l.note ? <span className="block text-[12.5px] text-ink-3">{l.note}</span> : null}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {menu ? (
         <div className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto border-t border-ink bg-paper lg:hidden" data-mobile-menu>

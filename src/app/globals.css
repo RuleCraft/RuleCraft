@@ -150,17 +150,18 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    height: 44px;
-    padding-inline: 18px;
+    min-height: 44px;
+    padding: 8px 18px;
+    text-align: center;
+    line-height: 1.25;
     border-radius: 4px;
     font-weight: 500;
     font-size: 15px;
-    white-space: nowrap;
     transition: background-color 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
   }
   .btn-sm {
-    height: 36px;
-    padding-inline: 13px;
+    min-height: 36px;
+    padding: 6px 13px;
     font-size: 14px;
   }
   .btn-signal {

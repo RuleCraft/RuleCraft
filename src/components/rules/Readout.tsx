@@ -73,15 +73,15 @@ function shortFlag(k: FlagKey) {
 export function CallbackList({ flags }: { flags: FlagKey[] }) {
   if (!flags.length) return <p className="text-[14px] text-ink-3">No callbacks. The pool behaves like a plain Uniswap v4 pool.</p>;
   return (
-    <ul className="divide-y divide-line border-y border-line">
+    <ul className="@container divide-y divide-line border-y border-line">
       {flags.map((k) => {
         const f = FLAG_BY_KEY[k];
         return (
-          <li key={k} className="grid grid-cols-1 gap-1 py-2.5 sm:grid-cols-[220px_1fr] sm:gap-4">
-            <span className="flex items-center gap-2 font-mono text-[12.5px] text-ink">
+          <li key={k} className="grid grid-cols-1 gap-1 py-2.5 @2xl:grid-cols-[270px_minmax(0,1fr)] @2xl:gap-4">
+            <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 font-mono text-[12.5px] text-ink">
               <span className={`size-2 shrink-0 rounded-[1px] ${f.group === "delta" ? "bg-signal" : "bg-ink"}`} />
-              {f.label}
-              <span className="text-ink-3">· {GROUP_LABEL[f.group]}</span>
+              <span className="min-w-0 [overflow-wrap:anywhere]">{f.label}</span>
+              <span className="text-ink-3">{GROUP_LABEL[f.group]}</span>
             </span>
             <span className="text-[13.5px] text-ink-2">
               {f.meaning} <span className="text-ink-3">{f.watch}</span>
@@ -122,7 +122,7 @@ export function LifecycleTrack({ modules }: { modules: RuleModule[] }) {
               ) : here.length ? (
                 <div className="mt-1 flex flex-wrap gap-1.5">
                   {here.map((m) => (
-                    <span key={m.slug} className="chip !text-ink">
+                    <span key={m.slug} className="chip max-w-full !whitespace-normal !text-ink">
                       <ModuleGlyph glyph={m.glyph} className="size-3.5" />
                       {m.name}
                     </span>
@@ -198,21 +198,20 @@ export function IssueList({ issues }: { issues: Issue[] }) {
 }
 
 export function TakeRow({ take }: { take: { buySteady: number; sellSteady: number; buyGuard: number } }) {
-  const cell = "min-w-0 border-l-2 border-ink pl-3";
+  const cells: [string, number][] = [
+    ["Buy", take.buySteady],
+    ["Sell", take.sellSteady],
+    ["Opening buy", take.buyGuard],
+  ];
+  // Cells wrap onto a second row when the card is narrow instead of squeezing.
   return (
-    <div className="grid grid-cols-3 gap-3">
-      <div className={cell}>
-        <p className="label">Buy</p>
-        <p className="num text-[20px] text-ink">{take.buySteady}%</p>
-      </div>
-      <div className={cell}>
-        <p className="label">Sell</p>
-        <p className="num text-[20px] text-ink">{take.sellSteady}%</p>
-      </div>
-      <div className={cell}>
-        <p className="label">Buy, opening</p>
-        <p className="num text-[20px] text-ink">{take.buyGuard}%</p>
-      </div>
-    </div>
+    <dl className="grid grid-cols-[repeat(auto-fit,minmax(112px,1fr))] gap-x-4 gap-y-3" data-take>
+      {cells.map(([k, v]) => (
+        <div key={k} className="min-w-0 border-l-2 border-ink pl-3">
+          <dt className="label leading-[1.35]">{k}</dt>
+          <dd className="num mt-0.5 text-[20px] leading-tight text-ink">{v}%</dd>
+        </div>
+      ))}
+    </dl>
   );
 }

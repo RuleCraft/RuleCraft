@@ -37,7 +37,7 @@ async function PoolBody({ id }: { id: string }) {
   const report = hooked ? await readHook(pool.hooks) : null;
   return (
     <>
-      <div className="grid grid-cols-2 gap-5 md:grid-cols-5">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-5">
         <Stat label="Fee" value={feeLabel(pool.fee)} note={pool.dynamic ? "set by the hook" : "fixed"} />
         <Stat label="Tick spacing" value={pool.tickSpacing} />
         <Stat label="Opening tick" value={pool.tick.toLocaleString("en-US")} />

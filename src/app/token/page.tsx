@@ -57,7 +57,7 @@ export default function TokenPage() {
       </PageHead>
 
       <section className="wrap py-12">
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6">
           <Stat label="Total supply" value="--" note="Opens at launch" />
           <Stat label="Market" value="--" note="No pool yet" />
           <Stat label="Burned" value="0" note="Opens at launch" />

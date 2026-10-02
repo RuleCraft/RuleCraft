@@ -53,7 +53,7 @@ export function Stat({ label, value, note }: { label: string; value: React.React
   return (
     <div className="min-w-0 border-l-2 border-ink pl-3">
       <p className="label">{label}</p>
-      <p className="num mt-1 truncate text-[22px] text-ink">{value}</p>
+      <p className="num mt-1 text-[22px] leading-tight text-ink [overflow-wrap:anywhere]">{value}</p>
       {note ? <p className="mt-0.5 text-[12.5px] text-ink-3">{note}</p> : null}
     </div>
   );

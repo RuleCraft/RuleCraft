@@ -191,7 +191,7 @@ export function Composer({ initial }: { initial?: string | null }) {
         </aside>
 
         {/* Center: pool + bits + track */}
-        <section className="grid grid-cols-1 min-w-0 content-start gap-5">
+        <section className="@container grid grid-cols-1 min-w-0 content-start gap-5">
           <div className="card tick p-4 sm:p-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
@@ -220,7 +220,7 @@ export function Composer({ initial }: { initial?: string | null }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 @2xl:grid-cols-2">
             <div className="card p-4 sm:p-5">
               <p className="label mb-3">Where each rule runs</p>
               <LifecycleTrack modules={c.modules} />

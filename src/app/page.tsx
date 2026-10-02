@@ -95,8 +95,7 @@ export default function Home() {
 
           {/* Index card: a rule set as a trader would read it */}
           <div className="relative min-w-0">
-            <div aria-hidden className="absolute -right-3 -top-3 hidden h-full w-full border border-ink bg-paper-2 sm:block" />
-            <div className="relative border border-ink bg-card p-5 sm:p-6">
+            <div className="relative border border-ink bg-card p-5 sm:mr-3 sm:mt-3 sm:p-6 sm:shadow-[12px_-12px_0_-1px_var(--color-paper-2),12px_-12px_0_0_var(--color-ink)]">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="label">Example blueprint</p>

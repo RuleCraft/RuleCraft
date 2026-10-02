@@ -47,7 +47,7 @@ export function PortfolioView() {
           </a>
         </div>
       </div>
-      <div className="mt-8 grid grid-cols-2 gap-6 md:grid-cols-4">
+      <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6">
         <Stat label={CHAIN.nativeSymbol} value={balance ?? "…"} note="Live" />
         <Stat label="USDG" value={usdg ?? "…"} note="Live" />
         <Stat label="Claimable" value="--" note="Opens at launch" />

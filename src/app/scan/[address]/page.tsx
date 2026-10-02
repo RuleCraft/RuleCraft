@@ -22,7 +22,7 @@ async function Report({ address }: { address: string }) {
   const dynamic = r.pools.some((p) => p.dynamic);
   return (
     <>
-      <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-5">
         <Stat label="Callbacks" value={`${r.flags.length} / 14`} />
         <Stat label="Bytecode" value={r.codeSize === null ? "--" : `${r.codeSize.toLocaleString("en-US")} B`} note={r.readOk ? (hasCode ? "contract" : "no code") : "read failed"} />
         <Stat label="Recent pools" value={r.pools.length} note="last ~8 hours" />

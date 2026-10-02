@@ -47,7 +47,7 @@ export function CaStrip({ tone = "paper" }: { tone?: "paper" | "night" }) {
   return (
     <div className={`flex max-w-full items-center gap-3 rounded-[4px] border px-3 py-2.5 ${night ? "border-white/15 bg-white/[0.04]" : "border-line-2 bg-card"}`}>
       <span className="shrink-0 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-signal">{BRAND.symbol}</span>
-      <span className={`min-w-0 flex-1 truncate font-mono text-[12.5px] ${night ? "text-white/85" : "text-ink"}`} data-ca-text>
+      <span className={`min-w-0 flex-1 break-all font-mono text-[12.5px] leading-snug ${night ? "text-white/85" : "text-ink"}`} data-ca-text>
         {live ? BRAND.ca : "Contract published at launch"}
       </span>
       <button
@@ -72,8 +72,8 @@ export function CaBlock() {
         {BRAND.symbol} contract · {CHAIN.name}
       </p>
       <div className="mt-3 flex items-center gap-2 rounded-[4px] border border-white/15 bg-white/[0.04] p-1.5 pl-3.5">
-        <span className="min-w-0 flex-1 truncate font-mono text-[12.5px] text-white/90" data-ca-text>
-          {live ? shortAddress(BRAND.ca, 10, 8) : "Published at launch"}
+        <span className="min-w-0 flex-1 break-all font-mono text-[12.5px] leading-snug text-white/90" data-ca-text>
+          {live ? BRAND.ca : "Published at launch"}
         </span>
         <button
           type="button"
